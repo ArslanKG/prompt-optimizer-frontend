@@ -2,7 +2,7 @@
 
 Bu proje, yapay zekaya gönderilen prompt'ları iyileştiren ve çoklu model stratejilerine göre cevaplar oluşturan bir sistemin **React tabanlı kullanıcı arayüzüdür**.
 
-> Backend: [.NET 8 Web API — PromptOptimizer.API](https://github.com/senin-backend-repo)
+> Backend: [.NET 8 Web API — PromptOptimizer.API](https://github.com/ArslanKG/PromptOptimizer)
 
 ---
 

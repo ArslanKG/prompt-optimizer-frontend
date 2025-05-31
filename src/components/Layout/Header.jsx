@@ -163,7 +163,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
               </IconButton>
 
               <IconButton
-                href="https://github.com"
+                href="https://github.com/ArslanKG"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
