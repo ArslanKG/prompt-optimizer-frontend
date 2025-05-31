@@ -1,3 +1,43 @@
+# 🧠 Prompt Optimizer Frontend
+
+Bu proje, yapay zekaya gönderilen prompt'ları iyileştiren ve çoklu model stratejilerine göre cevaplar oluşturan bir sistemin **React tabanlı kullanıcı arayüzüdür**.
+
+> Backend: [.NET 8 Web API — PromptOptimizer.API](https://github.com/senin-backend-repo)
+
+---
+
+## 🚀 Özellikler
+
+- 🎯 Prompt girişi ve düzenleme
+- 🤖 Strateji ve optimizasyon tipi seçimi
+- 💬 AI yanıtlarını chat formatında gösterme
+- 🔄 Gerçek zamanlı yüklenme animasyonu
+- 💡 Temiz, modüler ve ölçeklenebilir yapı
+- 🧩 Zustand ile global store
+- 🌐 Axios ile API iletişimi
+- 📁 Component bazlı klasörleme
+
+---
+
+## 🗂️ Proje Yapısı
+
+```bash
+src/
+├── assets/               # Logo ve statik dosyalar
+├── components/
+│   ├── Common/           # Spinner, Hata mesajı vb.
+│   ├── Layout/           # Header, Footer, Sayfa yapısı
+│   ├── ModelManagement/  # (Model listesi - opsiyonel)
+│   └── PromptOptimizer/  # Ana optimizasyon arayüzü
+├── pages/                # Route'a bağlı sayfalar (Home, Chat, Models, About)
+├── services/             # API işlemleri
+├── store/                # Global state (Zustand)
+├── styles/               # (Varsa Tailwind/CSS modülleri)
+├── utils/                # Sabitler ve yardımcılar
+├── App.jsx
+├── index.jsx
+└── .env
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
