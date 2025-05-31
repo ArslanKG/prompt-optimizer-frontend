@@ -1,10 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   TextField,
   IconButton,
   Box,
-  Typography,
-  Chip,
   useTheme,
   InputAdornment,
   Tooltip,
@@ -16,24 +14,16 @@ import {
   Psychology as PsychologyIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import { EXAMPLE_PROMPTS } from '../../utils/constants';
 
 const PromptInput = ({ value, onChange, onSubmit, onClear, loading, disabled }) => {
   const theme = useTheme();
   const textFieldRef = useRef(null);
-  const [showExamples, setShowExamples] = useState(true);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       onSubmit();
     }
-  };
-
-  const handleExampleClick = (prompt) => {
-    onChange(prompt);
-    setShowExamples(false);
-    textFieldRef.current?.focus();
   };
 
   return (
@@ -117,48 +107,6 @@ const PromptInput = ({ value, onChange, onSubmit, onClear, loading, disabled }) 
             ),
           }}
         />
-
-      {/* Example Prompts */}
-      {showExamples && !value && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Örnek promptlar:
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {EXAMPLE_PROMPTS.slice(0, 1)[0].prompts.slice(0, 4).map((prompt, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Chip
-                    label={prompt}
-                    onClick={() => handleExampleClick(prompt)}
-                    sx={{
-                      cursor: 'pointer',
-                      background: theme.palette.mode === 'dark'
-                        ? 'rgba(99, 102, 241, 0.1)'
-                        : 'rgba(99, 102, 241, 0.05)',
-                      '&:hover': {
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        color: 'white',
-                      },
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </Box>
-          </Box>
-        </motion.div>
-      )}
     </Box>
   );
 };

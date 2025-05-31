@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Box,
-  Container,
   Paper,
   Typography,
   Divider,
@@ -22,12 +21,11 @@ import StrategySelector from './StrategySelector';
 import OptimizationTypeSelector from './OptimizationTypeSelector';
 import ChatMessage from './ChatMessage';
 import LoadingSpinner from '../Common/LoadingSpinner';
-import Logo from '../Common/Logo';
 
 const PromptOptimizer = () => {
   const theme = useTheme();
   const messagesEndRef = useRef(null);
-  const [showSettings, setShowSettings] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
   const [messages, setMessages] = useState([]);
   
   const {
@@ -65,7 +63,6 @@ const PromptOptimizer = () => {
   const handleSubmit = async () => {
     if (!prompt.trim()) return;
     
-    // Add user message
     const userMessage = {
       id: Date.now(),
       content: prompt,
@@ -73,10 +70,8 @@ const PromptOptimizer = () => {
     };
     setMessages(prev => [...prev, userMessage]);
     
-    // Optimize and get response
     await optimize();
     
-    // Clear prompt after sending
     setPrompt('');
     setShowSettings(false);
   };
@@ -92,46 +87,35 @@ const PromptOptimizer = () => {
   };
   
   return (
-    <Container maxWidth="lg">
+    <Box
+      sx={{
+        height: '94vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
       >
         <Paper
           elevation={0}
           sx={{
-            borderRadius: 4,
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
             overflow: 'hidden',
             background: theme.palette.mode === 'dark'
               ? 'rgba(30, 41, 59, 0.5)'
               : 'rgba(248, 250, 252, 0.8)',
             backdropFilter: 'blur(10px)',
             border: `1px solid ${theme.palette.divider}`,
+            m: 2,
           }}
         >
-          {/* Header */}
-          <Box
-            sx={{
-              p: 3,
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-            }}
-          >
-            <Logo size={100} />
-            <Box>
-              <Typography variant="h5" fontWeight="bold">
-                Arkegu AI Chat
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9, mt: 0.5 }}>
-                Birden fazla AI modeli ile güçlendirilmiş akıllı asistan
-              </Typography>
-            </Box>
-          </Box>
-          
           {/* Settings Section */}
           <Box
             sx={{
@@ -185,7 +169,7 @@ const PromptOptimizer = () => {
           {/* Chat Messages */}
           <Box
             sx={{
-              height: '500px',
+              flex: 1,
               overflowY: 'auto',
               p: 3,
               backgroundColor: theme.palette.background.default,
@@ -261,7 +245,7 @@ const PromptOptimizer = () => {
           </Box>
         </Paper>
       </motion.div>
-    </Container>
+    </Box>
   );
 };
 
