@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo, useMemo } from 'react';
 import {
   Box,
   Paper,
@@ -22,6 +22,11 @@ import OptimizationTypeSelector from './OptimizationTypeSelector';
 import ChatMessage from './ChatMessage';
 import LoadingSpinner from '../Common/LoadingSpinner';
 
+// Memoize heavy components
+const MemoizedStrategySelector = memo(StrategySelector);
+const MemoizedOptimizationTypeSelector = memo(OptimizationTypeSelector);
+const MemoizedChatMessage = memo(ChatMessage);
+
 const PromptOptimizer = () => {
   const theme = useTheme();
   const messagesEndRef = useRef(null);
@@ -41,13 +46,13 @@ const PromptOptimizer = () => {
     error,
   } = useOptimizationStore();
   
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
   
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
   
   useEffect(() => {
     if (result && result.finalResponse) {
@@ -60,31 +65,96 @@ const PromptOptimizer = () => {
     }
   }, [result]);
   
-  const handleSubmit = async () => {
-    if (!prompt.trim()) return;
+  const handleSubmit = useCallback(async (promptValue) => {
+    // Use the passed promptValue or fallback to store prompt
+    const textToSubmit = promptValue || prompt;
+    
+    if (!textToSubmit.trim()) return;
+    
+    // Update store with the latest value
+    if (promptValue && promptValue !== prompt) {
+      setPrompt(promptValue);
+    }
     
     const userMessage = {
       id: Date.now(),
-      content: prompt,
+      content: textToSubmit,
       isUser: true,
     };
     setMessages(prev => [...prev, userMessage]);
     
-    await optimize();
-    
-    setPrompt('');
-    setShowSettings(false);
-  };
+    // Small delay to ensure store is updated before optimize
+    setTimeout(async () => {
+      await optimize();
+      setPrompt('');
+      setShowSettings(false);
+    }, 0);
+  }, [prompt, optimize, setPrompt]);
   
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setPrompt('');
-  };
+  }, [setPrompt]);
   
-  const handleNewChat = () => {
+  const handlePromptChange = useCallback((newValue) => {
+    setPrompt(newValue);
+  }, [setPrompt]);
+  
+  const handleNewChat = useCallback(() => {
     setMessages([]);
     setPrompt('');
     setShowSettings(true);
-  };
+  }, [setPrompt]);
+  
+  const toggleSettings = useCallback(() => {
+    setShowSettings(prev => !prev);
+  }, []);
+  
+  // Memoize strategy text
+  const strategyText = useMemo(() => (
+    <Typography variant="subtitle2">
+      Strateji: <strong>{STRATEGY_CONFIGS[strategy]?.name}</strong> • 
+      Optimizasyon: <strong>{OPTIMIZATION_TYPE_CONFIGS[optimizationType]?.name}</strong>
+    </Typography>
+  ), [strategy, optimizationType]);
+  
+  // Memoize empty state
+  const emptyState = useMemo(() => (
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+      }}
+    >
+      <Box>
+        <Typography variant="h3" sx={{ opacity: 0.1, mb: 2 }}>
+          💬
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Merhaba! Size nasıl yardımcı olabilirim?
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          Bir soru sorun ve AI modellerimiz size en iyi yanıtı versin.
+        </Typography>
+      </Box>
+    </Box>
+  ), []);
+  
+  // Memoize paper styles
+  const paperStyles = useMemo(() => ({
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    background: theme.palette.mode === 'dark'
+      ? 'rgba(30, 41, 59, 0.5)'
+      : 'rgba(248, 250, 252, 0.8)',
+    backdropFilter: 'blur(10px)',
+    border: `1px solid ${theme.palette.divider}`,
+    m: 2,
+  }), [theme.palette.mode, theme.palette.divider]);
   
   return (
     <Box
@@ -101,21 +171,7 @@ const PromptOptimizer = () => {
         transition={{ duration: 0.5 }}
         style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
       >
-        <Paper
-          elevation={0}
-          sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            background: theme.palette.mode === 'dark'
-              ? 'rgba(30, 41, 59, 0.5)'
-              : 'rgba(248, 250, 252, 0.8)',
-            backdropFilter: 'blur(10px)',
-            border: `1px solid ${theme.palette.divider}`,
-            m: 2,
-          }}
-        >
+        <Paper elevation={0} sx={paperStyles}>
           {/* Settings Section */}
           <Box
             sx={{
@@ -125,7 +181,7 @@ const PromptOptimizer = () => {
           >
             <Button
               fullWidth
-              onClick={() => setShowSettings(!showSettings)}
+              onClick={toggleSettings}
               endIcon={showSettings ? <CollapseIcon /> : <ExpandIcon />}
               sx={{
                 py: 1.5,
@@ -134,21 +190,18 @@ const PromptOptimizer = () => {
                 textTransform: 'none',
               }}
             >
-              <Typography variant="subtitle2">
-                Strateji: <strong>{STRATEGY_CONFIGS[strategy]?.name}</strong> • 
-                Optimizasyon: <strong>{OPTIMIZATION_TYPE_CONFIGS[optimizationType]?.name}</strong>
-              </Typography>
+              {strategyText}
             </Button>
             
             <Collapse in={showSettings}>
               <Box sx={{ p: 3 }}>
-                <StrategySelector
+                <MemoizedStrategySelector
                   value={strategy}
                   onChange={setStrategy}
                   disabled={loading}
                 />
                 <Divider sx={{ my: 3 }} />
-                <OptimizationTypeSelector
+                <MemoizedOptimizationTypeSelector
                   value={optimizationType}
                   onChange={setOptimizationType}
                   disabled={loading}
@@ -176,32 +229,12 @@ const PromptOptimizer = () => {
             }}
           >
             {messages.length === 0 ? (
-              <Box
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                }}
-              >
-                <Box>
-                  <Typography variant="h3" sx={{ opacity: 0.1, mb: 2 }}>
-                    💬
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    Merhaba! Size nasıl yardımcı olabilirim?
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    Bir soru sorun ve AI modellerimiz size en iyi yanıtı versin.
-                  </Typography>
-                </Box>
-              </Box>
+              emptyState
             ) : (
               <>
                 <AnimatePresence>
                   {messages.map((message) => (
-                    <ChatMessage
+                    <MemoizedChatMessage
                       key={message.id}
                       message={message.content}
                       isUser={message.isUser}
@@ -236,11 +269,12 @@ const PromptOptimizer = () => {
             )}
             <PromptInput
               value={prompt}
-              onChange={setPrompt}
+              onChange={handlePromptChange}
               onSubmit={handleSubmit}
               onClear={handleClear}
               loading={loading}
               disabled={loading}
+              hasMessages={messages.length > 0}
             />
           </Box>
         </Paper>
@@ -249,4 +283,4 @@ const PromptOptimizer = () => {
   );
 };
 
-export default PromptOptimizer;
+export default memo(PromptOptimizer);
