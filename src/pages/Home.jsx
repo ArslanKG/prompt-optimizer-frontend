@@ -20,9 +20,11 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../components/Common/Logo';
+import { useTranslation } from '../hooks/useTranslation';
 
 const FeatureCard = ({ icon, title, description, details, gradient, delay }) => {
     const theme = useTheme();
+    const { t } = useTranslation();
     const [expanded, setExpanded] = React.useState(false);
     
     return (
@@ -34,8 +36,8 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
       >
         <Card
           sx={{
-            height: expanded ? 'auto' : '220px', // 280px'den 220px'e düşürdük
-            minHeight: '220px', // 280px'den 220px'e düşürdük
+            height: expanded ? 'auto' : '220px',
+            minHeight: '220px',
             background: theme.palette.mode === 'dark'
               ? 'rgba(30, 41, 59, 0.6)'
               : 'rgba(255, 255, 255, 0.9)',
@@ -83,7 +85,7 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
             height: '100%',
             display: 'flex', 
             flexDirection: 'column',
-            justifyContent: 'space-between', // İçeriği üst ve alta yasla
+            justifyContent: 'space-between',
           }}>
             {/* Top Content */}
             <Box>
@@ -116,12 +118,12 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
                     variant="body1" 
                     color="text.secondary" 
                     sx={{ 
-                      lineHeight: 1.5, // 1.6'dan 1.5'e düşürdük
+                      lineHeight: 1.5,
                       display: '-webkit-box',
-                      WebkitLineClamp: expanded ? 'none' : 2, // 3'ten 2'ye geri döndük
+                      WebkitLineClamp: expanded ? 'none' : 2,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
-                      fontSize: '0.95rem', // Biraz daha küçük font
+                      fontSize: '0.95rem',
                     }}
                   >
                     {description}
@@ -140,7 +142,7 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
                   >
                     <Box sx={{ pt: 2, borderTop: `1px solid ${theme.palette.divider}` }}>
                       <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 2, opacity: 0.8 }}>
-                        Özellikler:
+                        {t.home.features.title}:
                       </Typography>
                       <Box component="ul" sx={{ m: 0, pl: 3 }}>
                         {details.map((detail, idx) => (
@@ -191,7 +193,7 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
                   fontSize: '0.75rem',
                 }}
               >
-                {expanded ? 'Detayları Gör' : 'Detayları Gör'}
+                {expanded ? t.common.hideDetails : t.common.showDetails}
                 <motion.span
                   animate={{ rotate: expanded ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
@@ -210,54 +212,35 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const features = [
     {
       icon: <PsychologyIcon sx={{ fontSize: 32 }} />,
-      title: 'Akıllı Optimizasyon',
-      description: 'Yapay zeka ile prompt\'larınızı otomatik olarak optimize edin.',
-      details: [
-        'Bağlam analizi ve otomatik iyileştirme',
-        'Dil bilgisi ve anlam düzeltmeleri',
-        'Hedef odaklı prompt yapılandırması',
-        'Çoklu optimizasyon seçeneği'
-      ],
+      title: t.home.features.smartOptimization.title,
+      description: t.home.features.smartOptimization.description,
+      details: t.home.features.smartOptimization.details,
       gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     },
     {
       icon: <GroupsIcon sx={{ fontSize: 32 }} />,
-      title: 'Multi-Model Desteği',
-      description: 'Arkegu AI ile 7+ farklı AI modeliyle çalışın, en iyi sonuçları alın.',
-      details: [
-        'GPT-4, GPT-4o ve GPT-4o-mini',
-        'DeepSeek Chat ve Reasoning modelleri',
-        'Grok-2 ve Grok-3 beta versiyonları',
-        'O3-mini yeni nesil model desteği'
-      ],
+      title: t.home.features.multiModel.title,
+      description: t.home.features.multiModel.description,
+      details: t.home.features.multiModel.details,
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     },
     {
       icon: <SpeedIcon sx={{ fontSize: 32 }} />,
-      title: '4 Farklı Strateji',
-      description: 'İhtiyacınıza göre hız, kalite, maliyet veya konsensüs stratejisi seçin.',
-      details: [
-        'Quality: En kaliteli ve detaylı yanıtlar',
-        'Speed: 3 saniyeden kısa sürede yanıt',
-        'Consensus: Çoklu model karşılaştırması',
-        'Cost-Effective: Bütçe dostu çözümler'
-      ],
+      title: t.home.features.strategies.title,
+      description: t.home.features.strategies.description,
+      details: t.home.features.strategies.details,
       gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     },
     {
       icon: <TrendingUpIcon sx={{ fontSize: 32 }} />,
-      title: 'Gelişmiş Analitik',
-      description: 'Kullanılan modeller, işlem süresi ve token kullanımını takip edin.',
-      details: [
-        'Gerçek zamanlı performans metrikleri',
-        'Model karşılaştırma ve maliyet analizi',
-        'Yanıt kalitesi değerlendirmesi',
-        'Kullanım istatistikleri ve raporlama'
-      ],
+      title: t.home.features.analytics.title,
+      description: t.home.features.analytics.description,
+      details: t.home.features.analytics.details,
       gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
     },
   ];
@@ -284,7 +267,7 @@ const Home = () => {
                 lineHeight: 1.2,
               }}
             >
-              <span className="gradient-text">Arkegu AI</span>
+              <span className="gradient-text">{t.home.title}</span>
             </Typography>
             <Typography
               variant="h4"
@@ -294,7 +277,7 @@ const Home = () => {
                 color: 'text.secondary',
               }}
             >
-              Multi-Model Prompt Optimizer
+              {t.home.subtitle}
             </Typography>
           </motion.div>
 
@@ -308,8 +291,7 @@ const Home = () => {
               color="text.secondary"
               sx={{ mb: 4, maxWidth: '800px', mx: 'auto' }}
             >
-              Prompt'larınızı optimize edin, birden fazla AI modelinden en iyi yanıtları alın.
-              Hız, kalite, maliyet veya konsensüs - siz seçin!
+              {t.home.description}
             </Typography>
           </motion.div>
 
@@ -339,7 +321,7 @@ const Home = () => {
                 }}
                 onClick={() => navigate('/chat')}
               >
-                Hemen Başla
+                {t.home.startButton}
               </Button>
               <Button
                 variant="outlined"
@@ -362,7 +344,7 @@ const Home = () => {
                   },
                 }}
               >
-                Neden Arkegu AI?
+                {t.home.exploreFeatures}
               </Button>
             </Box>
           </motion.div>
@@ -379,7 +361,7 @@ const Home = () => {
                   7+
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  AI Modeli
+                  {t.home.stats.models}
                 </Typography>
               </Box>
               <Box sx={{ textAlign: 'center' }}>
@@ -387,7 +369,7 @@ const Home = () => {
                   4
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Strateji
+                  {t.home.stats.strategies}
                 </Typography>
               </Box>
               <Box sx={{ textAlign: 'center' }}>
@@ -395,7 +377,7 @@ const Home = () => {
                   &lt;3s
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  En Hızlı Yanıt
+                  {t.home.stats.responseTime}
                 </Typography>
               </Box>
             </Box>
@@ -436,7 +418,7 @@ const Home = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              Neden Arkegu AI?
+              {t.home.features.title}
             </Typography>
             <Typography
               variant="h5"
@@ -444,8 +426,7 @@ const Home = () => {
               textAlign="center"
               sx={{ mb: 8, maxWidth: '800px', mx: 'auto' }}
             >
-              En gelişmiş AI modellerini tek bir platformda birleştirerek, 
-              ihtiyacınıza özel çözümler sunuyoruz
+              {t.home.features.subtitle}
             </Typography>
           </motion.div>
           
@@ -466,10 +447,10 @@ const Home = () => {
           >
             <Box sx={{ textAlign: 'center', mt: 8 }}>
               <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Hemen Başlayın
+                {t.home.cta.title}
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                Ücretsiz denemeye başlayın ve AI'nın gücünü keşfedin
+                {t.home.cta.description}
               </Typography>
               <Button
                 variant="contained"
@@ -492,7 +473,7 @@ const Home = () => {
                   },
                 }}
               >
-                Chat'e Git
+                {t.home.cta.button}
               </Button>
             </Box>
           </motion.div>

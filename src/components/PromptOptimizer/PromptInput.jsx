@@ -14,9 +14,11 @@ import {
   Psychology as PsychologyIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const PromptInput = memo(({ value, onChange, onSubmit, onClear, loading, disabled, hasMessages }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const textFieldRef = useRef(null);
   
   // Local state to prevent re-renders during typing
@@ -72,7 +74,7 @@ const PromptInput = memo(({ value, onChange, onSubmit, onClear, loading, disable
     <InputAdornment position="end">
       <Box sx={{ display: 'flex', gap: 1 }}>
         {localValue && (
-          <Tooltip title="Temizle">
+          <Tooltip title={t.common.close}>
             <IconButton
               size="small"
               onClick={handleClearClick}
@@ -82,7 +84,7 @@ const PromptInput = memo(({ value, onChange, onSubmit, onClear, loading, disable
             </IconButton>
           </Tooltip>
         )}
-        <Tooltip title="Gönder">
+        <Tooltip title={t.chat.buttons.send}>
           <IconButton
             color="primary"
             onClick={handleSubmitClick}
@@ -112,12 +114,12 @@ const PromptInput = memo(({ value, onChange, onSubmit, onClear, loading, disable
         </Tooltip>
       </Box>
     </InputAdornment>
-  ), [localValue, loading, handleClearClick, handleSubmitClick, theme.palette.action.disabledBackground]);
+  ), [localValue, loading, handleClearClick, handleSubmitClick, theme.palette.action.disabledBackground, t]);
 
   // Dynamic placeholder based on whether there are messages
   const placeholder = hasMessages 
-    ? "Sorunuzu yazın..." 
-    : "Prompt'unuzu buraya yazın... (Örn: React hooks nedir ve nasıl kullanılır?)";
+    ? t.chat.inputPlaceholder.continue 
+    : t.chat.inputPlaceholder.initial;
 
   return (
     <Box>

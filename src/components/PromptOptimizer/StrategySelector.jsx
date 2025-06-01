@@ -11,14 +11,16 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { STRATEGY_CONFIGS } from '../../utils/constants';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 const StrategySelector = ({ value, onChange, disabled }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Box>
       <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
-        Strateji Seçin
+        {t.chat.strategy}
       </Typography>
       <Grid container spacing={2}>
         {Object.entries(STRATEGY_CONFIGS).map(([key, config], index) => (
@@ -68,10 +70,10 @@ const StrategySelector = ({ value, onChange, disabled }) => {
                     </Typography>
                   </Box>
                   <Typography variant="subtitle1" fontWeight="bold" color={config.color}>
-                    {config.name}
+                    {t.strategies[key]?.name || config.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {config.description}
+                    {t.strategies[key]?.description || config.description}
                   </Typography>
                   <Chip
                     label={config.estimatedTime}

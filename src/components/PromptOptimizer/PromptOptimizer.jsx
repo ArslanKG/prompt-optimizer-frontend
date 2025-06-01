@@ -21,6 +21,7 @@ import StrategySelector from './StrategySelector';
 import OptimizationTypeSelector from './OptimizationTypeSelector';
 import ChatMessage from './ChatMessage';
 import LoadingSpinner from '../Common/LoadingSpinner';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // Memoize heavy components
 const MemoizedStrategySelector = memo(StrategySelector);
@@ -29,6 +30,7 @@ const MemoizedChatMessage = memo(ChatMessage);
 
 const PromptOptimizer = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const messagesEndRef = useRef(null);
   const [showSettings, setShowSettings] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -112,10 +114,10 @@ const PromptOptimizer = () => {
   // Memoize strategy text
   const strategyText = useMemo(() => (
     <Typography variant="subtitle2">
-      Strateji: <strong>{STRATEGY_CONFIGS[strategy]?.name}</strong> • 
-      Optimizasyon: <strong>{OPTIMIZATION_TYPE_CONFIGS[optimizationType]?.name}</strong>
+      {t.chat.strategy}: <strong>{t.strategies[strategy]?.name || STRATEGY_CONFIGS[strategy]?.name}</strong> • 
+      {t.chat.optimizationType}: <strong>{t.optimizationTypes[optimizationType]?.name || OPTIMIZATION_TYPE_CONFIGS[optimizationType]?.name}</strong>
     </Typography>
-  ), [strategy, optimizationType]);
+  ), [strategy, optimizationType, t]);
   
   // Memoize empty state
   const emptyState = useMemo(() => (
@@ -133,14 +135,14 @@ const PromptOptimizer = () => {
           💬
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Merhaba! Size nasıl yardımcı olabilirim?
+          {t.chat.emptyState.title}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Bir soru sorun ve AI modellerimiz size en iyi yanıtı versin.
+          {t.chat.emptyState.description}
         </Typography>
       </Box>
     </Box>
-  ), []);
+  ), [t]);
   
   // Memoize paper styles
   const paperStyles = useMemo(() => ({
@@ -245,7 +247,7 @@ const PromptOptimizer = () => {
                 {loading && (
                   <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <LoadingSpinner message="AI yanıt hazırlıyor..." />
+                      <LoadingSpinner message={t.chat.messages.thinking} />
                     </Box>
                   </Box>
                 )}
@@ -263,7 +265,7 @@ const PromptOptimizer = () => {
                   onClick={handleNewChat}
                   sx={{ textTransform: 'none' }}
                 >
-                  Yeni Sohbet Başlat
+                  {t.chat.buttons.newChat}
                 </Button>
               </Box>
             )}

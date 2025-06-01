@@ -24,6 +24,7 @@ import { motion } from 'framer-motion';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import toast from 'react-hot-toast';
+import { useTranslation } from '../../hooks/useTranslation';
 
 // Memoize heavy rendering functions
 const CodeBlock = memo(({ language, code, theme, onCopy }) => (
@@ -138,12 +139,13 @@ FormattedText.displayName = 'FormattedText';
 
 const ChatMessage = memo(({ message, isUser, result }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleCopy = useCallback((text) => {
     navigator.clipboard.writeText(text);
-    toast.success('Kopyalandı!');
-  }, []);
+    toast.success(t.success.copied || 'Copied!');
+  }, [t]);
 
   const toggleExpanded = useCallback(() => {
     setExpanded(prev => !prev);
@@ -288,7 +290,7 @@ const ChatMessage = memo(({ message, isUser, result }) => {
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
                   <Chip
                     icon={<SpeedIcon />}
-                    label={`${result.strategy} stratejisi`}
+                    label={`${t.strategies[result.strategy]?.name || result.strategy} ${t.chat.strategy.toLowerCase()}`}
                     size="small"
                     color="primary"
                     variant="outlined"
@@ -301,7 +303,7 @@ const ChatMessage = memo(({ message, isUser, result }) => {
                   />
                   {result.modelsUsed?.length > 0 && (
                     <Chip
-                      label={`${result.modelsUsed.length} model kullanıldı`}
+                      label={`${result.modelsUsed.length} model`}
                       size="small"
                       variant="outlined"
                       onClick={toggleExpanded}
@@ -314,12 +316,12 @@ const ChatMessage = memo(({ message, isUser, result }) => {
                 <Collapse in={expanded}>
                   <Box sx={{ mt: 1, p: 2, bgcolor: 'action.hover', borderRadius: 2 }}>
                     <Typography variant="caption" color="text.secondary">
-                      Kullanılan modeller: {result.modelsUsed?.join(', ')}
+                      {t.models.title}: {result.modelsUsed?.join(', ')}
                     </Typography>
                     {result.optimizedPrompt && result.optimizedPrompt !== message && (
                       <Box sx={{ mt: 1 }}>
                         <Typography variant="caption" color="text.secondary">
-                          Optimize edilmiş prompt:
+                          Optimized prompt:
                         </Typography>
                         <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
                           "{result.optimizedPrompt}"
@@ -335,7 +337,7 @@ const ChatMessage = memo(({ message, isUser, result }) => {
               {renderContent}
               
               {!isUser && (
-                <Tooltip title="Yanıtı kopyala">
+                <Tooltip title="Copy response">
                   <IconButton
                     size="small"
                     onClick={() => handleCopy(message)}

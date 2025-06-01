@@ -1,7 +1,11 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { useTranslation } from '../../hooks/useTranslation';
 
-const LoadingSpinner = ({ message = 'Yükleniyor...' }) => {
+const LoadingSpinner = ({ message }) => {
+  const { t } = useTranslation();
+  const displayMessage = message || t.common.loading;
+
   return (
     <Box
       sx={{
@@ -15,7 +19,7 @@ const LoadingSpinner = ({ message = 'Yükleniyor...' }) => {
     >
       <CircularProgress />
       <Typography variant="body2" color="text.secondary">
-        {message}
+        {displayMessage}
       </Typography>
     </Box>
   );

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Box, Container, Typography, Link } from '@mui/material';
 import Logo from '../Common/Logo';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       component="footer"
@@ -20,17 +23,23 @@ const Footer = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 2 }}>
           <Logo size={40} />
           <Typography variant="h6" fontWeight="bold">
-            Arkegu AI
+            {t.home.title}
           </Typography>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center">
           {'© '}
           {new Date().getFullYear()}
-          {' Arkegu AI. Built with '}
+          {' '}
+          {t.home.title}
+          {'. '}
+          {t.footer.builtWith}
+          {' '}
           <Link color="inherit" href="https://mui.com/">
             Material-UI
           </Link>
-          {' and '}
+          {' '}
+          {t.footer.and}
+          {' '}
           <Link color="inherit" href="https://reactjs.org/">
             React
           </Link>

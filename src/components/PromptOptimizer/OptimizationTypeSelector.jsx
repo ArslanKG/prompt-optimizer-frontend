@@ -8,14 +8,16 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { OPTIMIZATION_TYPE_CONFIGS } from '../../utils/constants';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const OptimizationTypeSelector = ({ value, onChange, disabled }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Box>
       <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
-        Optimizasyon Tipi
+        {t.chat.optimizationType}
       </Typography>
       <ToggleButtonGroup
         value={value}
@@ -53,10 +55,10 @@ const OptimizationTypeSelector = ({ value, onChange, disabled }) => {
                   {config.icon}
                 </Typography>
                 <Typography variant="subtitle2" fontWeight="bold">
-                  {config.name}
+                  {t.optimizationTypes[key]?.name || config.name}
                 </Typography>
                 <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
-                  {config.description}
+                  {t.optimizationTypes[key]?.description || config.description}
                 </Typography>
               </Box>
             </motion.div>

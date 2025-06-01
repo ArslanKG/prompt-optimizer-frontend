@@ -20,24 +20,19 @@ import {
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import Logo from '../components/Common/Logo';
+import { useTranslation } from '../hooks/useTranslation';
 
 const About = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   
-  const features = [
-    'Multi-model AI desteği ile en iyi sonuçları alın',
-    'Prompt optimizasyonu ile daha etkili sorgular',
-    '4 farklı strateji ile ihtiyacınıza uygun çözümler',
-    'Gerçek zamanlı yanıt ve işlem takibi',
-    'Modern ve kullanıcı dostu arayüz',
-    'Güvenli ve hızlı API entegrasyonu',
-  ];
+  const features = t.about.features;
   
   const techStack = [
-    { icon: <CodeIcon />, title: 'Backend', tech: '.NET 8, C#, RESTful API', color: '#667eea' },
-    { icon: <AIIcon />, title: 'AI Models', tech: 'GPT-4, Gemini, DeepSeek, Grok', color: '#764ba2' },
-    { icon: <SpeedIcon />, title: 'Frontend', tech: 'React, Material-UI, Framer Motion', color: '#f59e0b' },
-    { icon: <SecurityIcon />, title: 'Security', tech: 'HTTPS, Bearer Auth, CORS', color: '#10b981' },
+    { icon: <CodeIcon />, title: t.about.technologies.stack.backend.title, tech: t.about.technologies.stack.backend.tech, color: '#667eea' },
+    { icon: <AIIcon />, title: t.about.technologies.stack.ai.title, tech: t.about.technologies.stack.ai.tech, color: '#764ba2' },
+    { icon: <SpeedIcon />, title: t.about.technologies.stack.frontend.title, tech: t.about.technologies.stack.frontend.tech, color: '#f59e0b' },
+    { icon: <SecurityIcon />, title: t.about.technologies.stack.security.title, tech: t.about.technologies.stack.security.tech, color: '#10b981' },
   ];
   
   return (
@@ -57,11 +52,10 @@ const About = () => {
               fontWeight="bold"
               gutterBottom
             >
-              Arkegu AI Hakkında
+              {t.about.title}
             </Typography>
             <Typography variant="h5" color="text.secondary" sx={{ maxWidth: 800, mx: 'auto' }}>
-              Yapay zeka teknolojilerini kullanarak prompt optimizasyonu yapan,
-              çoklu AI modeli desteği sunan yenilikçi bir platform
+              {t.about.subtitle}
             </Typography>
           </Box>
           
@@ -86,16 +80,13 @@ const About = () => {
                   }}
                 >
                   <Typography variant="h4" fontWeight="bold" gutterBottom>
-                    Misyonumuz
+                    {t.about.mission.title}
                   </Typography>
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Arkegu AI, kullanıcıların AI modellerinden en verimli şekilde
-                    faydalanmalarını sağlamak için geliştirilmiş bir platformdur.
+                    {t.about.mission.description1}
                   </Typography>
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Amacımız, karmaşık AI teknolojilerini herkes için erişilebilir ve
-                    kullanımı kolay hale getirmektir. Birden fazla AI modelini tek bir
-                    platformda birleştirerek, kullanıcılarımıza en iyi sonuçları sunuyoruz.
+                    {t.about.mission.description2}
                   </Typography>
                   <List>
                     {features.map((feature, index) => (
@@ -126,7 +117,7 @@ const About = () => {
                 style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
               >
                 <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 3 }}>
-                  Teknolojilerimiz
+                  {t.about.technologies.title}
                 </Typography>
                 
                 <Paper
@@ -191,13 +182,13 @@ const About = () => {
                   }}
                 >
                   <Typography variant="h6" fontWeight="bold" gutterBottom>
-                    İletişim
+                    {t.about.contact.title}
                   </Typography>
                   <Typography variant="body2">
-                    Sorularınız veya önerileriniz için bizimle iletişime geçin
+                    {t.about.contact.description}
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1 }}>
-                    info@arkegu.ai
+                    {t.about.contact.email}
                   </Typography>
                 </Paper>
               </motion.div>

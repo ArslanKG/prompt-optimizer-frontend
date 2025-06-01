@@ -20,6 +20,7 @@ import {
 import { motion } from 'framer-motion';
 import { optimizationApi } from '../services/api';
 import { MODEL_TYPE_COLORS } from '../utils/constants';
+import { useTranslation } from '../hooks/useTranslation';
 
 // Helper function to get the appropriate icon based on model type
 const getModelIcon = (type) => {
@@ -34,6 +35,7 @@ const getModelIcon = (type) => {
 
 const Models = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [models, setModels] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -73,10 +75,10 @@ const Models = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              AI Modelleri
+              {t.models.title}
             </Typography>
             <Typography variant="h5" color="text.secondary">
-              Kullanılabilir tüm AI modellerini keşfedin
+              {t.models.subtitle}
             </Typography>
           </Box>
 
@@ -96,36 +98,36 @@ const Models = () => {
               <Grid item xs={12} md={3}>
                 <Box sx={{ textAlign: 'center' }}>
                   <SpeedIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.fast, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">Hızlı</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t.models.types.fast.name}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    En hızlı yanıt süreleri
+                    {t.models.types.fast.description}
                   </Typography>
                 </Box>
               </Grid>
               <Grid item xs={12} md={3}>
                 <Box sx={{ textAlign: 'center' }}>
                   <BalanceIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.balanced, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">Dengeli</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t.models.types.balanced.name}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Hız ve kalite dengesi
+                    {t.models.types.balanced.description}
                   </Typography>
                 </Box>
               </Grid>
               <Grid item xs={12} md={3}>
                 <Box sx={{ textAlign: 'center' }}>
                   <PsychologyIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.advanced, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">Gelişmiş</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t.models.types.advanced.name}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    En yüksek kalite
+                    {t.models.types.advanced.description}
                   </Typography>
                 </Box>
               </Grid>
               <Grid item xs={12} md={3}>
                 <Box sx={{ textAlign: 'center' }}>
                   <ReasoningIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.reasoning, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">Muhakeme</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t.models.types.reasoning.name}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Karmaşık problemler için
+                    {t.models.types.reasoning.description}
                   </Typography>
                 </Box>
               </Grid>
@@ -182,7 +184,7 @@ const Models = () => {
                             {model.id}
                           </Typography>
                           <Chip
-                            label={model.type}
+                            label={t.models.types[model.type]?.name || model.type}
                             size="small"
                             sx={{
                               backgroundColor: `${MODEL_TYPE_COLORS[model.type]}20`,
@@ -193,7 +195,7 @@ const Models = () => {
                           />
                           {model.isEnabled !== false && (
                             <Chip
-                              label="Aktif"
+                              label={t.models.labels.active}
                               size="small"
                               color="success"
                             />
@@ -202,7 +204,7 @@ const Models = () => {
                         
                         <Box sx={{ mx: 3, width: '20%' }}>
                           <Typography variant="body2" color="text.secondary" gutterBottom>
-                            Maliyet
+                            {t.models.labels.cost}
                           </Typography>
                           <Typography variant="h6" color="primary">
                             ${model.cost}
@@ -211,7 +213,7 @@ const Models = () => {
                         
                         <Box sx={{ width: '30%' }}>
                           <Typography variant="body2" color="text.secondary" gutterBottom>
-                            Öncelik Seviyesi
+                            {t.models.labels.priority}
                           </Typography>
                           <LinearProgress
                             variant="determinate"

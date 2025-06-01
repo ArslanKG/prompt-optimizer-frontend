@@ -9,6 +9,7 @@ import Models from './pages/Models';
 import About from './pages/About';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import Chat from './pages/Chat';
+import { TranslationProvider } from './contexts/TranslationContext';
 
 function App() {
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', true);
@@ -79,31 +80,33 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: darkMode ? '#1e293b' : '#fff',
-            color: darkMode ? '#fff' : '#0f172a',
-            borderRadius: '12px',
-            padding: '16px',
-          },
-        }}
-      />
-      <Router>
-        <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/models" element={<Models />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/chat" element={<Chat />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </ThemeProvider>
+    <TranslationProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Toaster 
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: darkMode ? '#1e293b' : '#fff',
+              color: darkMode ? '#fff' : '#0f172a',
+              borderRadius: '12px',
+              padding: '16px',
+            },
+          }}
+        />
+        <Router>
+          <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/models" element={<Models />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/chat" element={<Chat />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </ThemeProvider>
+    </TranslationProvider>
   );
 }
 

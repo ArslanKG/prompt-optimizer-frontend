@@ -26,6 +26,7 @@ import {
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../Common/Logo';
+import { useTranslation } from '../../hooks/useTranslation';
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -39,6 +40,7 @@ function HideOnScroll({ children }) {
 const Header = ({ darkMode, toggleDarkMode }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -61,10 +63,10 @@ const Header = ({ darkMode, toggleDarkMode }) => {
   };
 
   const navItems = [
-    { label: 'Ana Sayfa', path: '/', icon: <AutoAwesomeIcon /> },
-    { label: 'Chat', path: '/chat', icon: <AutoAwesomeIcon /> },
-    { label: 'Modeller', path: '/models', icon: <ModelIcon /> },
-    { label: 'Hakkında', path: '/about', icon: <SpeedIcon /> },
+    { label: t.navigation.home, path: '/', icon: <AutoAwesomeIcon /> },
+    { label: t.navigation.chat, path: '/chat', icon: <AutoAwesomeIcon /> },
+    { label: t.navigation.models, path: '/models', icon: <ModelIcon /> },
+    { label: t.navigation.about, path: '/about', icon: <SpeedIcon /> },
   ];
 
   return (
@@ -112,7 +114,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
                     display: { xs: 'none', md: 'block' },
                   }}
                 >
-                  Arkegu AI
+                  {t.home.title}
                 </Typography>
               </Box>
             </motion.div>
@@ -228,7 +230,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
                 <MenuItem onClick={toggleDarkMode}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-                    {darkMode ? 'Açık Tema' : 'Koyu Tema'}
+                    {darkMode ? 'Light Theme' : 'Dark Theme'}
                   </Box>
                 </MenuItem>
               </Menu>
