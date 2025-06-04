@@ -18,9 +18,9 @@ import {
   AutoFixHigh as ReasoningIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import { optimizationApi } from '../services/api';
 import { MODEL_TYPE_COLORS } from '../utils/constants';
 import { useTranslation } from '../hooks/useTranslation';
+import modelsData from '../data/models.json';
 
 // Helper function to get the appropriate icon based on model type
 const getModelIcon = (type) => {
@@ -42,7 +42,8 @@ const Models = () => {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const data = await optimizationApi.getModels();
+        // Use local models data directly
+        const data = modelsData.models;
         // Convert array to object with id as key for compatibility
         const modelsObject = {};
         data.forEach(model => {
@@ -50,7 +51,7 @@ const Models = () => {
         });
         setModels(modelsObject);
       } catch (error) {
-        // If API fails, the optimizationApi.getModels() will return fallback data from models.json
+        console.error('Failed to load models:', error);
         setModels({});
       } finally {
         setLoading(false);

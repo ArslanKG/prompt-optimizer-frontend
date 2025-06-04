@@ -70,6 +70,32 @@ api.interceptors.response.use(
 
 // Chat API - New endpoint structure
 export const chatApi = {
+  // Send message to public chat (no auth required)
+  sendPublicMessage: async (data) => {
+    // Sanitize data to prevent Unicode errors
+    const sanitizedData = sanitizeObject(data);
+    
+    // Additional check for empty or invalid message after sanitization
+    if (!sanitizedData.message || sanitizedData.message.trim().length === 0) {
+      throw new Error('Message text is required and cannot be empty');
+    }
+    
+    const chatData = {
+      message: sanitizedData.message,
+    };
+    
+    try {
+      const response = await api.post('/public/chat/send', chatData);
+      return response.data;
+    } catch (error) {
+      // Handle specific JSON parsing errors
+      if (error.message && error.message.includes('surrogate')) {
+        throw new Error('Mesajda geçersiz karakterler bulundu. Lütfen emoji ve özel karakterleri kontrol edin.');
+      }
+      throw error;
+    }
+  },
+
   // Send message to chat
   sendMessage: async (data) => {
     const token = localStorage.getItem('jwt_token');

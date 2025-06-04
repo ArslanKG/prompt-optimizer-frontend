@@ -317,8 +317,15 @@ const useOptimizationStore = create((set, get) => ({
     try {
       let result;
       
-      // Use strategy-based chat if useStrategy is true
-      if (useStrategy) {
+      // Use public endpoint if no auth required
+      if (!requireAuth) {
+        const publicData = {
+          message: prompt,
+        };
+        
+        result = await chatApi.sendPublicMessage(publicData);
+      } else if (useStrategy) {
+        // Use strategy-based chat if useStrategy is true
         const strategyData = {
           message: prompt,
           strategy,

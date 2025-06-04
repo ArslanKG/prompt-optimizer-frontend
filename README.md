@@ -11,6 +11,8 @@ Bu proje, yapay zekaya gönderilen prompt'ları iyileştiren ve çoklu model str
 - 🎯 Prompt girişi ve düzenleme
 - 🤖 Strateji ve optimizasyon tipi seçimi
 - 💬 AI yanıtlarını chat formatında gösterme
+- 🌐 **Public Chat** - Auth olmadan `/api/public/chat/send` endpoint'i (GPT-4o-mini, 30 req/hour)
+- 📊 **Models Sayfası** - 7 AI modelinin detaylı görüntülenmesi (yerel veri)
 - 🔄 Gerçek zamanlı yüklenme animasyonu
 - 💡 Temiz, modüler ve ölçeklenebilir yapı
 - 🧩 Zustand ile global store
@@ -196,3 +198,27 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 🆘 Support
+
+- 📧 Email: support@arkegu.com
+- 🌐 Website: [arkegu.com](https://arkegu.com)
+- 📚 Documentation: [docs.arkegu.com](https://docs.arkegu.com)
+
+---
+
+**Built with ❤️ by [Arkegu AI](https://arkegu.com)**

@@ -1,12 +1,17 @@
 #!/usr/bin/env node
 /**
  * Frontend Reference MCP Server for Prompt Optimizer
- * 
+ *
  * Provides reference data, best practices, and guidance for frontend and AI assistant.
  * Optimization processing is handled by the backend API.
- * 
+ *
+ * Updates v2.0.1:
+ * - Public chat endpoint support (/api/public/chat/send)
+ * - Models page local data integration
+ * - Enhanced frontend guidance
+ *
  * @author Prompt Optimizer Team
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -20,7 +25,7 @@ dotenv.config();
 // Configuration
 const CONFIG = {
   serverName: "prompt-optimizer-frontend-reference",
-  serverVersion: "2.0.0",
+  serverVersion: "2.0.1",
 };
 
 /**
@@ -297,10 +302,12 @@ const FRONTEND_DATA = {
         title: "UI/UX Best Practices",
         guidelines: [
           "Provide real-time feedback during optimization",
-          "Show progress indicators for long-running operations", 
+          "Show progress indicators for long-running operations",
           "Use clear visual hierarchy for strategy selection",
           "Implement responsive design for mobile users",
-          "Provide tooltips and help text for complex features"
+          "Provide tooltips and help text for complex features",
+          "Support both authenticated and public chat modes",
+          "Display model information clearly with pricing and capabilities"
         ]
       },
       {
@@ -310,7 +317,9 @@ const FRONTEND_DATA = {
           "Implement optimistic updates for better UX",
           "Handle loading and error states gracefully",
           "Persist user preferences locally",
-          "Manage session state for conversations"
+          "Manage session state for conversations",
+          "Use local JSON data as fallback for API failures",
+          "Implement proper auth state management for public vs private features"
         ]
       },
       {
@@ -320,9 +329,189 @@ const FRONTEND_DATA = {
           "Debounce user input to reduce API calls",
           "Implement virtual scrolling for large lists",
           "Use React.memo for expensive components",
-          "Optimize re-renders with proper dependencies"
+          "Optimize re-renders with proper dependencies",
+          "Load models data from local JSON instead of API calls",
+          "Use efficient fallback mechanisms for offline scenarios"
+        ]
+      },
+      {
+        title: "API Integration",
+        guidelines: [
+          "Support multiple endpoint types (public/private)",
+          "Implement proper error handling for network failures",
+          "Use local data when API is unavailable",
+          "Handle authentication gracefully with fallbacks",
+          "Sanitize user input to prevent Unicode errors",
+          "Implement rate limiting awareness for public endpoints"
         ]
       }
+    ]
+  },
+
+  /**
+   * FRONTEND PROJECT STRUCTURE REFERENCE
+   * Detailed mapping of all files and their purposes in the src/ directory
+   * Updated: 2025-01-06
+   */
+  projectStructure: {
+    title: "Frontend Project Structure Reference",
+    description: "Complete mapping of all files and directories in the React frontend project",
+    rootFiles: {
+      "App.css": {
+        purpose: "Temel uygulama stilleri ve animasyonlar",
+        content: "CSS sınıfları, keyframe animasyonları, responsive tasarım",
+        lastUpdated: "2025-01-06"
+      },
+      "App.js": {
+        purpose: "Ana uygulama bileşeni - routing, tema, providers",
+        content: "React Router kurulumu, Material-UI tema, Auth/Translation providers, route yapılandırması",
+        lastUpdated: "2025-01-06"
+      },
+      "index.css": {
+        purpose: "Global stiller, font tanımları, scrollbar özelleştirmeleri",
+        content: "Inter font import, global reset, scrollbar stilleri, gradient tanımları, animasyonlar",
+        lastUpdated: "2025-01-06"
+      },
+      "index.js": {
+        purpose: "React uygulamasının giriş noktası",
+        content: "ReactDOM render, error handling, ResizeObserver error suppression",
+        lastUpdated: "2025-01-06"
+      },
+      "logo.svg": {
+        purpose: "React varsayılan logosu (kullanılmıyor)",
+        content: "SVG format React logosu",
+        lastUpdated: "2025-01-06"
+      },
+      "reportWebVitals.js": {
+        purpose: "Performans metrikleri (devre dışı)",
+        content: "Web vitals performans ölçüm fonksiyonları - şu an kullanılmıyor",
+        lastUpdated: "2025-01-06"
+      }
+    },
+    directories: {
+      "assets/": {
+        purpose: "Statik dosyalar - resimler, logolar, ikonlar",
+        files: {
+          "arkegu-logo.png": "Arkegu şirket logosu",
+          "en.png": "İngilizce bayrak ikonu",
+          "tr.png": "Türkçe bayrak ikonu"
+        }
+      },
+      "components/": {
+        purpose: "Yeniden kullanılabilir React bileşenleri",
+        subdirectories: {
+          "Auth/": {
+            "AuthModal.jsx": "Kimlik doğrulama modal bileşeni - giriş/kayıt formu",
+            "ProtectedRoute.jsx": "Route koruma bileşeni - kimlik doğrulama kontrolü"
+          },
+          "Chat/": {
+            "SessionSidebar.jsx": "Chat oturumları sidebar bileşeni - oturum listesi ve navigasyon"
+          },
+          "Common/": {
+            "ErrorMessage.jsx": "Hata mesajı gösterimi bileşeni",
+            "LoadingSpinner.jsx": "Yükleme animasyonu bileşeni",
+            "Logo.jsx": "Uygulama logosu bileşeni",
+            "StorageMonitor.jsx": "LocalStorage izleme bileşeni"
+          },
+          "Layout/": {
+            "Footer.jsx": "Sayfa alt bilgi bileşeni",
+            "Header.jsx": "Sayfa üst bilgi bileşeni - navigasyon, tema değiştirici",
+            "Layout.jsx": "Ana layout wrapper bileşeni"
+          },
+          "PromptOptimizer/": {
+            "ChatMessage.jsx": "Chat mesajı görüntüleme bileşeni - markdown render, kopyala",
+            "OptimizationTypeSelector.jsx": "Optimizasyon türü seçici bileşeni",
+            "PromptInput.jsx": "Prompt girişi bileşeni - textarea, karakter sayısı",
+            "PromptOptimizer.jsx": "Ana prompt optimizasyon bileşeni",
+            "StrategySelector.jsx": "Strateji seçici bileşeni - kalite/hız/konsensüs"
+          }
+        }
+      },
+      "contexts/": {
+        purpose: "React Context API dosyaları - global state yönetimi",
+        files: {
+          "AuthContext.js": "Kimlik doğrulama context - login/logout state",
+          "TranslationContext.js": "Çoklu dil desteği context - dil değiştirme"
+        }
+      },
+      "data/": {
+        purpose: "JSON veri dosyaları - statik konfigürasyon",
+        files: {
+          "models.json": "AI model tanımları - GPT-4, Claude, DeepSeek",
+          "optimizationTypes.json": "Optimizasyon türleri - clarity, performance, creativity",
+          "strategies.json": "Optimizasyon stratejileri - quality, speed, consensus"
+        }
+      },
+      "hooks/": {
+        purpose: "Özel React hook'ları - yeniden kullanılabilir logic",
+        files: {
+          "useApi.js": "API çağrıları için custom hook",
+          "useLocalStorage.js": "LocalStorage yönetimi hook",
+          "useTranslation.js": "Çeviri sistemi hook"
+        }
+      },
+      "locales/": {
+        purpose: "Çoklu dil desteği dosyaları",
+        files: {
+          "en.js": "İngilizce çeviri metinleri",
+          "tr.js": "Türkçe çeviri metinleri",
+          "index.js": "Dil dosyalarının ana export'u"
+        }
+      },
+      "pages/": {
+        purpose: "Sayfa bileşenleri - route'lara karşılık gelen ana sayfalar",
+        files: {
+          "About.jsx": "Hakkımızda sayfası",
+          "Chat.jsx": "Genel chat sayfası (public)",
+          "Home.jsx": "Ana sayfa - landing page",
+          "Models.jsx": "AI modelleri tanıtım sayfası",
+          "PremiumChat.jsx": "Premium chat sayfası - session yönetimi, gelişmiş özellikler"
+        }
+      },
+      "services/": {
+        purpose: "API servis dosyaları - backend iletişimi",
+        files: {
+          "api.js": "Ana API servis dosyası - axios konfigürasyonu, interceptors, public chat endpoint"
+        }
+      },
+      "store/": {
+        purpose: "Zustand state yönetimi - global state",
+        files: {
+          "optimizationStore.js": "Ana store - API calls, session yönetimi, cache"
+        }
+      },
+      "styles/": {
+        purpose: "Ek stil dosyaları (şu an boş)",
+        files: {}
+      },
+      "utils/": {
+        purpose: "Yardımcı fonksiyonlar ve utilities",
+        files: {
+          "constants.js": "Uygulama sabitleri ve konfigürasyon",
+          "errorLogger.js": "Hata loglama utilities",
+          "markdownRenderer.js": "Temel markdown renderer (legacy)",
+          "enhancedMarkdownRenderer.js": "Gelişmiş markdown renderer - kod blokları, JSON, inline code, header kopyalama",
+          "sessionCache.js": "Session cache yönetimi - localStorage optimizasyonu",
+          "textSanitizer.js": "Metin temizleme ve sanitization"
+        }
+      }
+    },
+    keyArchitecturalDecisions: [
+      "React 18+ with functional components and hooks only",
+      "Material-UI v5+ for consistent design system",
+      "Zustand for lightweight state management",
+      "React Router v6 for client-side routing",
+      "Axios for HTTP client with interceptors",
+      "React Context for auth and translation state",
+      "LocalStorage for session caching and user preferences"
+    ],
+    codeOrganizationPrinciples: [
+      "Feature-based component organization",
+      "Separation of concerns (UI, logic, data)",
+      "Reusable hooks for shared logic",
+      "Centralized API calls in store",
+      "Type safety through PropTypes or TypeScript",
+      "Performance optimization with React.memo and useMemo"
     ]
   }
 };

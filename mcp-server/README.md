@@ -158,6 +158,14 @@ The server provides data that matches frontend expectations:
 - **UI-friendly formats** with colors, icons, and display text
 - **Development guidance** for frontend best practices
 - **Template structure** that can be directly used in UI
+- **Local data fallback** - Models page uses local `models.json` data when API unavailable
+- **Public chat support** - Frontend supports `/api/public/chat/send` endpoint for non-authenticated users
+
+### Recent Updates (v2.0.1)
+- ✅ **Public Chat Integration**: Frontend now supports public chat endpoint without authentication
+- ✅ **Models Page Fix**: Resolved display issues by using local JSON data as primary source
+- ✅ **Enhanced API Service**: Added `sendPublicMessage` method for unauthenticated requests
+- ✅ **Improved Error Handling**: Better fallback mechanisms for API failures
 
 ## Security & Performance
 
