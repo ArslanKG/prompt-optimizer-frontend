@@ -1091,8 +1091,6 @@ const PremiumChat = () => {
     setTemperature,
     useStrategy,
     setUseStrategy,
-    models,
-    strategies,
     optimizationTypes,
     enableMemory,
     contextWindowSize,
@@ -1417,7 +1415,7 @@ const PremiumChat = () => {
     } finally {
       setIsTyping(false);
     }
-  }, [currentSession, optimize, t]);
+  }, [currentSession, optimize, t, useStrategy, strategy, selectedModel, temperature]);
 
   const handleCopyMessage = useCallback(() => {
     toast.success(t('premiumChat.messageCopied'), { duration: 2000 });
