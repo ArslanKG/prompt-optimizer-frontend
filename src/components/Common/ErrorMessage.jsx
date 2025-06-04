@@ -11,13 +11,13 @@ const ErrorMessage = ({ error, onRetry }) => {
       action={
         onRetry && (
           <Button color="inherit" size="small" onClick={onRetry}>
-            {t.common.refresh}
+            {t('common.refresh')}
           </Button>
         )
       }
     >
-      <AlertTitle>{t.common.error}</AlertTitle>
-      {error || t.errors.general}
+      <AlertTitle>{t('common.error')}</AlertTitle>
+      {error || t('errors.general')}
     </Alert>
   );
 };

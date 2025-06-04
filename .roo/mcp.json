@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "prompt-optimizer": {
+      "command": "node",
+      "args": ["mcp-server/index.js"],
+      "env": {
+        "SERVER_NAME": "prompt-optimizer-frontend-reference",
+        "SERVER_VERSION": "2.0.0",
+        "LOG_LEVEL": "info"
+      },
+      "disabled": false,
+      "alwaysAllow": [],
+      "timeout": 30,
+      "cwd": "c:/Users/Arslan/source/repos/prompt-optimizer-frontend"
+    }
+  }
+}

@@ -13,6 +13,8 @@ import {
   Menu,
   MenuItem,
   Divider,
+  Avatar,
+  Tooltip,
 } from '@mui/material';
 import {
   Brightness4 as DarkModeIcon,
@@ -22,11 +24,18 @@ import {
   AutoAwesome as AutoAwesomeIcon,
   Speed as SpeedIcon,
   ModelTraining as ModelIcon,
+  Login as LoginIcon,
+  Logout as LogoutIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '../Common/Logo';
-import { useTranslation } from '../../hooks/useTranslation';
+import { useTranslation } from '../../contexts/TranslationContext';
+import { useAuth } from '../../contexts/AuthContext';
+import AuthModal from '../Auth/AuthModal';
+import trFlag from '../../assets/tr.png';
+import enFlag from '../../assets/en.png';
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -40,9 +49,13 @@ function HideOnScroll({ children }) {
 const Header = ({ darkMode, toggleDarkMode }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const location = useLocation();
+  const { t, language, changeLanguage } = useTranslation();
+  const { isAuthenticated, user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userMenuAnchor, setUserMenuAnchor] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,12 +75,39 @@ const Header = ({ darkMode, toggleDarkMode }) => {
     setAnchorEl(null);
   };
 
+  const handleUserMenu = (event) => {
+    setUserMenuAnchor(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setUserMenuAnchor(null);
+  };
+
+  const handleLogin = () => {
+    setAuthModalOpen(true);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    handleUserMenuClose();
+  };
+
+  const handleLanguageToggle = () => {
+    const newLanguage = language === 'tr' ? 'en' : 'tr';
+    changeLanguage(newLanguage);
+  };
+
   const navItems = [
-    { label: t.navigation.home, path: '/', icon: <AutoAwesomeIcon /> },
-    { label: t.navigation.chat, path: '/chat', icon: <AutoAwesomeIcon /> },
-    { label: t.navigation.models, path: '/models', icon: <ModelIcon /> },
-    { label: t.navigation.about, path: '/about', icon: <SpeedIcon /> },
+    { label: t('navigation.home'), path: '/', icon: <AutoAwesomeIcon /> },
+    { label: t('navigation.chat'), path: '/chat', icon: <AutoAwesomeIcon /> },
+    { label: t('navigation.models'), path: '/models', icon: <ModelIcon /> },
+    { label: t('navigation.about'), path: '/about', icon: <SpeedIcon /> },
   ];
+
+  // Don't show header on premium chat page (it has its own header)
+  if (location.pathname === '/premium/chat') {
+    return null;
+  }
 
   return (
     <HideOnScroll>
@@ -75,14 +115,23 @@ const Header = ({ darkMode, toggleDarkMode }) => {
         position="fixed"
         elevation={0}
         sx={{
-          backdropFilter: 'blur(20px)',
-          backgroundColor: scrolled
+          backdropFilter: 'blur(30px)',
+          background: scrolled
             ? theme.palette.mode === 'dark'
-              ? 'rgba(15, 23, 42, 0.8)'
-              : 'rgba(255, 255, 255, 0.8)'
-            : 'transparent',
-          borderBottom: scrolled ? `1px solid ${theme.palette.divider}` : 'none',
-          transition: 'all 0.3s ease-in-out',
+              ? 'linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)'
+              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)'
+            : theme.palette.mode === 'dark'
+              ? 'linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, transparent 100%)'
+              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%)',
+          borderBottom: scrolled
+            ? `1px solid ${theme.palette.mode === 'dark' ? 'rgba(110, 97, 204, 0.1)' : 'rgba(110, 97, 204, 0.08)'}`
+            : 'none',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: scrolled
+            ? theme.palette.mode === 'dark'
+              ? '0 8px 32px rgba(0, 0, 0, 0.3)'
+              : '0 8px 32px rgba(0, 0, 0, 0.1)'
+            : 'none',
         }}
       >
         <Container maxWidth="xl">
@@ -114,7 +163,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
                     display: { xs: 'none', md: 'block' },
                   }}
                 >
-                  {t.home.title}
+                  {t('home.title')}
                 </Typography>
               </Box>
             </motion.div>
@@ -135,9 +184,25 @@ const Header = ({ darkMode, toggleDarkMode }) => {
                     onClick={() => navigate(item.path)}
                     sx={{
                       color: theme.palette.text.primary,
+                      borderRadius: 3,
+                      px: 2.5,
+                      py: 1,
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      fontFamily: 'Inter, sans-serif',
+                      background: 'transparent',
+                      border: `1px solid transparent`,
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       '&:hover': {
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        color: 'white',
+                        background: theme.palette.mode === 'dark'
+                          ? 'rgba(110, 97, 204, 0.15)'
+                          : 'rgba(110, 97, 204, 0.08)',
+                        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(110, 97, 204, 0.3)' : 'rgba(110, 97, 204, 0.2)'}`,
+                        color: '#6E61CC',
+                        transform: 'translateY(-1px)',
+                        boxShadow: theme.palette.mode === 'dark'
+                          ? '0 8px 25px rgba(110, 97, 204, 0.2)'
+                          : '0 8px 25px rgba(110, 97, 204, 0.15)',
                       },
                     }}
                   >
@@ -148,12 +213,42 @@ const Header = ({ darkMode, toggleDarkMode }) => {
 
               <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
 
+              <Tooltip title={language === 'tr' ? 'Switch to English' : 'Türkçe\'ye geç'}>
+                <IconButton
+                  onClick={handleLanguageToggle}
+                  sx={{
+                    ml: 1,
+                    background: theme.palette.mode === 'dark'
+                      ? 'rgba(255, 255, 255, 0.1)'
+                      : 'rgba(0, 0, 0, 0.05)',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                    },
+                    width: 40,
+                    height: 40,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <img
+                      src={language === 'tr' ? trFlag : enFlag}
+                      alt={language === 'tr' ? 'Turkish' : 'English'}
+                      style={{
+                        width: 40,
+                        height: 'auto',
+                        borderRadius: 2,
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      }}
+                    />
+                  </Box>
+                </IconButton>
+              </Tooltip>
+
               <IconButton
                 onClick={toggleDarkMode}
                 sx={{
-                  ml: 1,
-                  background: theme.palette.mode === 'dark' 
-                    ? 'rgba(255, 255, 255, 0.1)' 
+                  background: theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.1)'
                     : 'rgba(0, 0, 0, 0.05)',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -169,8 +264,8 @@ const Header = ({ darkMode, toggleDarkMode }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  background: theme.palette.mode === 'dark' 
-                    ? 'rgba(255, 255, 255, 0.1)' 
+                  background: theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.1)'
                     : 'rgba(0, 0, 0, 0.05)',
                   '&:hover': {
                     background: '#333',
@@ -180,6 +275,46 @@ const Header = ({ darkMode, toggleDarkMode }) => {
               >
                 <GitHubIcon />
               </IconButton>
+
+              <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+
+              {/* Authentication */}
+              {isAuthenticated ? (
+                <Tooltip title={user?.username || 'User'}>
+                  <IconButton
+                    onClick={handleUserMenu}
+                    sx={{
+                      background: theme.palette.mode === 'dark'
+                        ? 'rgba(255, 255, 255, 0.1)'
+                        : 'rgba(0, 0, 0, 0.05)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    <Avatar sx={{ width: 28, height: 28 }}>
+                      {user?.username?.charAt(0).toUpperCase() || <PersonIcon />}
+                    </Avatar>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Button
+                  startIcon={<LoginIcon />}
+                  onClick={handleLogin}
+                  sx={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)',
+                    },
+                    textTransform: 'none',
+                    fontWeight: 600,
+                  }}
+                >
+                  {t('auth.signIn')}
+                </Button>
+              )}
             </Box>
 
             {/* Mobile Navigation */}
@@ -227,6 +362,21 @@ const Header = ({ darkMode, toggleDarkMode }) => {
                   </MenuItem>
                 ))}
                 <Divider />
+                <MenuItem onClick={handleLanguageToggle}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <img
+                      src={language === 'tr' ? enFlag : trFlag}
+                      alt={language === 'tr' ? 'Switch to English' : 'Switch to Turkish'}
+                      style={{
+                        width: 20,
+                        height: 'auto',
+                        borderRadius: 2,
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                      }}
+                    />
+                    {language === 'tr' ? 'English' : 'Türkçe'}
+                  </Box>
+                </MenuItem>
                 <MenuItem onClick={toggleDarkMode}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
@@ -237,6 +387,41 @@ const Header = ({ darkMode, toggleDarkMode }) => {
             </Box>
           </Toolbar>
         </Container>
+
+        {/* User Menu */}
+        <Menu
+          anchorEl={userMenuAnchor}
+          open={Boolean(userMenuAnchor)}
+          onClose={handleUserMenuClose}
+          PaperProps={{
+            sx: {
+              minWidth: 200,
+              mt: 1,
+              '& .MuiMenuItem-root': {
+                fontSize: '0.875rem',
+              },
+            },
+          }}
+        >
+          <Box sx={{ px: 2, py: 1, borderBottom: `1px solid ${theme.palette.divider}` }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+              {user?.username}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {user?.email}
+            </Typography>
+          </Box>
+          <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
+            <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
+            {t('auth.signOut')}
+          </MenuItem>
+        </Menu>
+
+        {/* Auth Modal */}
+        <AuthModal
+          open={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+        />
       </AppBar>
     </HideOnScroll>
   );

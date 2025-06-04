@@ -134,6 +134,11 @@ export const en = {
       description1: 'Arkegu AI is a platform developed to enable users to benefit from AI models most efficiently.',
       description2: 'Our goal is to make complex AI technologies accessible and easy to use for everyone.',
     },
+    vision: {
+      title: 'Our Vision',
+      description1: 'To become a world leader in AI-powered prompt optimization and revolutionize digital content creation.',
+      description2: 'To set new standards in AI-human collaboration and achieve the perfect harmony of creativity and technology.',
+    },
     features: [
       'Get the best results with multi-model AI support',
       'More effective queries with prompt optimization',
@@ -205,13 +210,13 @@ export const en = {
       name: 'Creativity',
       description: 'More creative and original',
     },
-    conciseness: {
-      name: 'Conciseness',
-      description: 'Shorter and more concise',
+    performance: {
+      name: 'Performance',
+      description: 'Faster and more efficient',
     },
-    detail: {
-      name: 'Detail',
-      description: 'More detailed and comprehensive',
+    accuracy: {
+      name: 'Accuracy',
+      description: 'More accurate and precise',
     },
   },
 
@@ -225,21 +230,26 @@ export const en = {
       name: 'Speed',
       description: 'Fastest response',
     },
-    consensus: {
-      name: 'Consensus',
-      description: 'Multi-model consensus',
-    },
-    costEffective: {
+    cost_effective: {
       name: 'Cost-Effective',
       description: 'Cost-focused',
+    },
+    reasoning: {
+      name: 'Reasoning',
+      description: 'Advanced reasoning',
+    },
+    creative: {
+      name: 'Creative',
+      description: 'Creative solutions',
     },
   },
 
   // Footer
   footer: {
-    copyright: '© 2024 Arkegu AI. All rights reserved.',
+    copyright: 'All rights reserved.',
     builtWith: 'Built with',
     and: 'and',
+    contact: 'Contact',
   },
 
   // Error Messages
@@ -260,5 +270,97 @@ export const en = {
     updated: 'Successfully updated',
     deleted: 'Successfully deleted',
     sent: 'Successfully sent',
+    copied: 'Copied!',
+  },
+
+  // Authentication
+  auth: {
+    welcomeBack: 'Welcome Back',
+    createAccount: 'Create Account',
+    login: 'Login',
+    register: 'Register',
+    username: 'Username',
+    password: 'Password',
+    email: 'Email',
+    confirmPassword: 'Confirm Password',
+    signIn: 'Sign In',
+    signUp: 'Sign Up',
+    signOut: 'Sign Out',
+    forgotPassword: 'Forgot Password',
+    rememberMe: 'Remember Me',
+  },
+
+  // Session Management
+  sessions: {
+    newChat: 'New Chat',
+    sessionOptions: 'Session Options',
+    deleteSession: 'Delete Session',
+    loadingSessions: 'Loading sessions...',
+    noSessions: 'No chat sessions yet. Start a new conversation!',
+    signInToSave: 'Sign in to save and access your chat history',
+    savedSessions: 'saved sessions',
+    sessionDeleted: 'Session successfully deleted',
+    failedToDelete: 'Failed to delete session',
+    failedToLoad: 'Failed to load chat sessions',
+    messages: 'messages',
+    searchConversations: 'Search conversations',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    previous7Days: 'Previous 7 days',
+    welcomeToArkegu: 'Welcome to Arkegu AI',
+  },
+
+  // Chat Settings
+  chatSettings: {
+    title: 'Chat Settings',
+    chatMode: 'Chat Mode',
+    strategyMode: 'Strategy Mode',
+    directModel: 'Direct Model',
+    strategyModeDescription: 'Strategy mode uses optimized AI configurations for specific purposes',
+    directModelDescription: 'Direct model mode gives you full control over model selection and parameters',
+    optimizationStrategy: 'Optimization Strategy',
+    optimizationType: 'Optimization Type',
+    modelSelection: 'Model Selection',
+    temperature: 'Temperature',
+    currentStrategyFeatures: 'Current Strategy Features',
+    memorySettings: 'Memory Settings',
+    enableMemory: 'Enable conversation memory',
+    memoryDescription: 'Remember previous messages for context',
+    contextWindowSize: 'Memory Size',
+    contextWindowDescription: 'Number of previous messages to remember',
+    messagesCount: 'messages',
+  },
+
+  // Memory and Settings
+  memory: {
+    sessionMemory: 'Session Memory',
+    enableMemory: 'Enable conversation memory',
+    memoryDescription: 'Remember previous messages in this session for context',
+    contextWindow: 'Context Window Size',
+    contextDescription: 'Number of previous messages to include as context',
+    memoryOn: 'Memory On',
+    memoryOff: 'Memory Off',
+  },
+
+  // Copy and Actions
+  actions: {
+    copy: 'Copy',
+    copyResponse: 'Copy Response',
+    expand: 'Expand',
+    collapse: 'Collapse',
+    showMore: 'Show More',
+    showLess: 'Show Less',
+  },
+
+  // Premium Chat
+  premiumChat: {
+    messagePlaceholder: 'Message Premium Chat...',
+    messageSentError: 'Failed to send message. Please try again.',
+    messageCopied: 'Message copied!',
+    sessionLoadError: 'Failed to load session',
+    logoutTitle: 'Sign Out',
+    logoutConfirmation: 'Are you sure you want to sign out from account?',
+    cancel: 'Cancel',
+    logout: 'Sign Out',
   },
 };

@@ -142,7 +142,7 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
                   >
                     <Box sx={{ pt: 2, borderTop: `1px solid ${theme.palette.divider}` }}>
                       <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 2, opacity: 0.8 }}>
-                        {t.home.features.title}:
+                        {t('home.features.title')}:
                       </Typography>
                       <Box component="ul" sx={{ m: 0, pl: 3 }}>
                         {details.map((detail, idx) => (
@@ -193,7 +193,7 @@ const FeatureCard = ({ icon, title, description, details, gradient, delay }) => 
                   fontSize: '0.75rem',
                 }}
               >
-                {expanded ? t.common.hideDetails : t.common.showDetails}
+                {expanded ? t('common.hideDetails') : t('common.showDetails')}
                 <motion.span
                   animate={{ rotate: expanded ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
@@ -217,30 +217,30 @@ const Home = () => {
   const features = [
     {
       icon: <PsychologyIcon sx={{ fontSize: 32 }} />,
-      title: t.home.features.smartOptimization.title,
-      description: t.home.features.smartOptimization.description,
-      details: t.home.features.smartOptimization.details,
+      title: t('home.features.smartOptimization.title'),
+      description: t('home.features.smartOptimization.description'),
+      details: t('home.features.smartOptimization.details'),
       gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     },
     {
       icon: <GroupsIcon sx={{ fontSize: 32 }} />,
-      title: t.home.features.multiModel.title,
-      description: t.home.features.multiModel.description,
-      details: t.home.features.multiModel.details,
+      title: t('home.features.multiModel.title'),
+      description: t('home.features.multiModel.description'),
+      details: t('home.features.multiModel.details'),
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     },
     {
       icon: <SpeedIcon sx={{ fontSize: 32 }} />,
-      title: t.home.features.strategies.title,
-      description: t.home.features.strategies.description,
-      details: t.home.features.strategies.details,
+      title: t('home.features.strategies.title'),
+      description: t('home.features.strategies.description'),
+      details: t('home.features.strategies.details'),
       gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     },
     {
       icon: <TrendingUpIcon sx={{ fontSize: 32 }} />,
-      title: t.home.features.analytics.title,
-      description: t.home.features.analytics.description,
-      details: t.home.features.analytics.details,
+      title: t('home.features.analytics.title'),
+      description: t('home.features.analytics.description'),
+      details: t('home.features.analytics.details'),
       gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
     },
   ];
@@ -267,7 +267,7 @@ const Home = () => {
                 lineHeight: 1.2,
               }}
             >
-              <span className="gradient-text">{t.home.title}</span>
+              <span className="gradient-text">{t('home.title')}</span>
             </Typography>
             <Typography
               variant="h4"
@@ -277,7 +277,7 @@ const Home = () => {
                 color: 'text.secondary',
               }}
             >
-              {t.home.subtitle}
+              {t('home.subtitle')}
             </Typography>
           </motion.div>
 
@@ -291,7 +291,7 @@ const Home = () => {
               color="text.secondary"
               sx={{ mb: 4, maxWidth: '800px', mx: 'auto' }}
             >
-              {t.home.description}
+              {t('home.description')}
             </Typography>
           </motion.div>
 
@@ -321,7 +321,7 @@ const Home = () => {
                 }}
                 onClick={() => navigate('/chat')}
               >
-                {t.home.startButton}
+                {t('home.startButton')}
               </Button>
               <Button
                 variant="outlined"
@@ -344,7 +344,7 @@ const Home = () => {
                   },
                 }}
               >
-                {t.home.exploreFeatures}
+                {t('home.exploreFeatures')}
               </Button>
             </Box>
           </motion.div>
@@ -361,7 +361,7 @@ const Home = () => {
                   7+
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {t.home.stats.models}
+                  {t('home.stats.models')}
                 </Typography>
               </Box>
               <Box sx={{ textAlign: 'center' }}>
@@ -369,7 +369,7 @@ const Home = () => {
                   4
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {t.home.stats.strategies}
+                  {t('home.stats.strategies')}
                 </Typography>
               </Box>
               <Box sx={{ textAlign: 'center' }}>
@@ -377,7 +377,7 @@ const Home = () => {
                   &lt;3s
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {t.home.stats.responseTime}
+                  {t('home.stats.responseTime')}
                 </Typography>
               </Box>
             </Box>
@@ -418,7 +418,7 @@ const Home = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              {t.home.features.title}
+              {t('home.features.title')}
             </Typography>
             <Typography
               variant="h5"
@@ -426,13 +426,13 @@ const Home = () => {
               textAlign="center"
               sx={{ mb: 8, maxWidth: '800px', mx: 'auto' }}
             >
-              {t.home.features.subtitle}
+              {t('home.features.subtitle')}
             </Typography>
           </motion.div>
           
           <Grid container spacing={4}>
             {features.map((feature, index) => (
-              <Grid item xs={12} md={6} key={index}>
+              <Grid size={{ xs: 12, md: 6 }} key={index}>
                 <FeatureCard {...feature} delay={0.1 * index} />
               </Grid>
             ))}
@@ -447,10 +447,10 @@ const Home = () => {
           >
             <Box sx={{ textAlign: 'center', mt: 8 }}>
               <Typography variant="h4" fontWeight="bold" gutterBottom>
-                {t.home.cta.title}
+                {t('home.cta.title')}
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                {t.home.cta.description}
+                {t('home.cta.description')}
               </Typography>
               <Button
                 variant="contained"
@@ -473,7 +473,7 @@ const Home = () => {
                   },
                 }}
               >
-                {t.home.cta.button}
+                {t('home.cta.button')}
               </Button>
             </Box>
           </motion.div>

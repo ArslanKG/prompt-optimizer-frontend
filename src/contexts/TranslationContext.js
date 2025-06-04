@@ -16,15 +16,33 @@ export const TranslationProvider = ({ children }) => {
     return localStorage.getItem('language') || defaultLanguage;
   });
 
-  const [t, setT] = useState(() => getTranslation(language));
+  const [translations, setTranslations] = useState(() => getTranslation(language));
 
   useEffect(() => {
-    setT(getTranslation(language));
+    setTranslations(getTranslation(language));
     localStorage.setItem('language', language);
   }, [language]);
 
   const changeLanguage = (newLanguage) => {
     setLanguage(newLanguage);
+  };
+
+  // Create t function that can handle nested keys like 'chatSettings.title'
+  const t = (key, fallback = key) => {
+    if (!key) return fallback;
+    
+    const keys = key.split('.');
+    let result = translations;
+    
+    for (const k of keys) {
+      if (result && typeof result === 'object' && k in result) {
+        result = result[k];
+      } else {
+        return fallback;
+      }
+    }
+    
+    return typeof result === 'string' || Array.isArray(result) ? result : fallback;
   };
 
   const value = {

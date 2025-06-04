@@ -7,9 +7,9 @@ export const STRATEGIES = {
   
   export const OPTIMIZATION_TYPES = {
     CLARITY: 'clarity',
-    TECHNICAL: 'technical',
-    CREATIVE: 'creative',
-    ANALYTICAL: 'analytical',
+    CREATIVITY: 'creativity',
+    PERFORMANCE: 'performance',
+    ACCURACY: 'accuracy',
   };
   
   export const STRATEGY_CONFIGS = {
@@ -37,16 +37,24 @@ export const STRATEGIES = {
   
   export const OPTIMIZATION_TYPE_CONFIGS = {
     [OPTIMIZATION_TYPES.CLARITY]: {
-      icon: '🎯',
+      icon: '💎',
+      name: 'Netlik',
+      description: 'Açık ve anlaşılır yanıtlar',
     },
-    [OPTIMIZATION_TYPES.TECHNICAL]: {
-      icon: '💻',
-    },
-    [OPTIMIZATION_TYPES.CREATIVE]: {
+    [OPTIMIZATION_TYPES.CREATIVITY]: {
       icon: '🎨',
+      name: 'Yaratıcılık',
+      description: 'Yaratıcı ve özgün çözümler',
     },
-    [OPTIMIZATION_TYPES.ANALYTICAL]: {
-      icon: '📊',
+    [OPTIMIZATION_TYPES.PERFORMANCE]: {
+      icon: '⚡',
+      name: 'Performans',
+      description: 'Hızlı işlem süresi',
+    },
+    [OPTIMIZATION_TYPES.ACCURACY]: {
+      icon: '🎯',
+      name: 'Doğruluk',
+      description: 'Yüksek doğruluk oranı',
     },
   };
   

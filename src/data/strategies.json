@@ -1,0 +1,60 @@
+{
+  "strategies": [
+    {
+      "id": "quality",
+      "name": "Quality",
+      "description": "En yüksek kalite",
+      "color": "#f59e0b",
+      "icon": "🏆",
+      "estimatedTime": "10-15s",
+      "features": [
+        "En kaliteli ve detaylı yanıtlar",
+        "Çoklu model karşılaştırması",
+        "Gelişmiş doğrulama",
+        "Kapsamlı analiz"
+      ]
+    },
+    {
+      "id": "speed",
+      "name": "Speed", 
+      "description": "En hızlı yanıt",
+      "color": "#10b981",
+      "icon": "⚡",
+      "estimatedTime": "2-5s",
+      "features": [
+        "3 saniyeden kısa sürede yanıt",
+        "Hızlı işlem",
+        "Anlık sonuç",
+        "Düşük gecikme"
+      ]
+    },
+    {
+      "id": "consensus",
+      "name": "Consensus",
+      "description": "Çoklu model uzlaşısı",
+      "color": "#8b5cf6",
+      "icon": "🤝",
+      "estimatedTime": "15-30s",
+      "features": [
+        "Birden fazla modelden yanıt",
+        "Konsensüs tabanlı sonuç",
+        "Yüksek güvenilirlik",
+        "Karşılaştırmalı analiz"
+      ]
+    },
+    {
+      "id": "costEffective",
+      "name": "Cost-Effective",
+      "description": "Maliyet odaklı",
+      "color": "#06b6d4",
+      "icon": "💰",
+      "estimatedTime": "5-10s",
+      "features": [
+        "Bütçe dostu çözümler",
+        "Düşük maliyet",
+        "Verimli kaynak kullanımı",
+        "Ekonomik seçenek"
+      ]
+    }
+  ]
+}

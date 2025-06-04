@@ -19,24 +19,112 @@ Bu proje, yapay zekaya gönderilen prompt'ları iyileştiren ve çoklu model str
 
 ---
 
-## 🗂️ Proje Yapısı
+## 🤖 MCP Server
+
+Bu proje ayrıca **Model Context Protocol (MCP) Server** içermektedir - prompt optimizasyon araçları ve kaynakları sağlayan kapsamlı bir sunucu.
+
+### MCP Server Özellikleri
+
+#### 🔧 Araçlar (6 adet)
+- **optimize_prompt** - Çeşitli stratejiler ve modeller kullanarak prompt optimizasyonu
+- **analyze_prompt_quality** - Detaylı geri bildirimle prompt kalite analizi
+- **get_optimization_suggestions** - Promptlar için spesifik iyileştirme önerileri
+- **compare_models** - Farklı kullanım durumları için AI model karşılaştırması
+- **validate_prompt_structure** - Prompt yapısı ve format doğrulaması
+- **generate_prompt_variations** - Mevcut promptların çoklu varyasyonlarını üretme
+
+#### 📚 Kaynaklar (4 adet)
+- **prompt://strategies** - Optimizasyon stratejileri
+- **prompt://models** - Desteklenen AI modelleri ve fiyatlandırma
+- **prompt://best-practices** - Prompt yazma rehberi
+- **prompt://templates** - Hazır prompt şablonları
+
+### Hızlı Kurulum
+
+1. **MCP Server dizinine gidin**:
+   ```bash
+   cd mcp-server
+   npm install
+   ```
+
+2. **Ortam değişkenlerini yapılandırın** (`.env` dosyası):
+   ```env
+   API_BASE_URL=https://localhost:7179/api
+   USE_MOCK_DATA=false
+   ENABLE_CACHE=true
+   JWT_TOKEN=your_token_here  # Opsiyonel
+   ```
+
+### Kullanım Örnekleri
+
+```javascript
+// Prompt optimizasyonu
+use_mcp_tool("prompt-optimizer", "optimize_prompt", {
+  "prompt": "Bir hikaye yaz",
+  "strategy": "quality",
+  "optimizationType": "clarity"
+});
+
+// Model karşılaştırması
+use_mcp_tool("prompt-optimizer", "compare_models", {
+  "criteria": ["cost", "speed", "quality"],
+  "useCase": "general text generation"
+});
+
+// Stratejileri getir
+access_mcp_resource("prompt-optimizer", "prompt://strategies");
+```
+
+### Test ve Doğrulama
+
+```bash
+cd mcp-server
+node test-setup.js
+```
+
+### Özellikler
+
+- ✅ **Backend Entegrasyonu**: API bağlantısı ve otomatik fallback
+- ✅ **Mock Data**: Geliştirme için kapsamlı test verisi
+- ✅ **Önbellekleme**: Performans için akıllı yanıt önbellekleme
+- ✅ **Kimlik Doğrulama**: JWT token desteği
+- ✅ **Hata Yönetimi**: Zarif hata kurtarma ve loglama
+- ✅ **Doğrulama**: Zod şemaları ile giriş doğrulaması
+
+> **Detaylı Dokümantasyon**: [`mcp-server/README.md`](mcp-server/README.md)
+> **Kullanım Rehberi**: [`MCP-SERVER-USAGE.md`](MCP-SERVER-USAGE.md)
+
+---
+
+## �️ Proje Yapısı
 
 ```bash
 src/
 ├── assets/               # Logo ve statik dosyalar
 ├── components/
+│   ├── Auth/             # Kimlik doğrulama bileşenleri
+│   ├── Chat/             # Chat ve session yönetimi
 │   ├── Common/           # Spinner, Hata mesajı vb.
 │   ├── Layout/           # Header, Footer, Sayfa yapısı
-│   ├── ModelManagement/  # (Model listesi - opsiyonel)
 │   └── PromptOptimizer/  # Ana optimizasyon arayüzü
-├── pages/                # Route'a bağlı sayfalar (Home, Chat, Models, About)
+├── contexts/             # React Context providers
+├── data/                 # JSON veri dosyaları
+├── hooks/                # Özel React hooks
+├── locales/              # Çok dilli destek
+├── pages/                # Route'a bağlı sayfalar
 ├── services/             # API işlemleri
 ├── store/                # Global state (Zustand)
-├── styles/               # (Varsa Tailwind/CSS modülleri)
 ├── utils/                # Sabitler ve yardımcılar
-├── App.jsx
-├── index.jsx
+├── App.js
+├── index.js
 └── .env
+
+mcp-server/               # MCP Server
+├── index.js              # Ana MCP sunucu dosyası
+├── package.json          # Node.js bağımlılıkları
+├── .env                  # MCP sunucu yapılandırması
+├── README.md             # Detaylı MCP dokümantasyonu
+└── test-setup.js         # Doğrulama script'i
 
 # Getting Started with Create React App
 

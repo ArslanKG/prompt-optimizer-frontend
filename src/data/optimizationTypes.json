@@ -1,0 +1,56 @@
+{
+  "optimizationTypes": [
+    {
+      "id": "clarity",
+      "name": "Clarity",
+      "description": "Netlik",
+      "color": "#06b6d4",
+      "icon": "💎",
+      "features": [
+        "Açık ve anlaşılır yanıtlar",
+        "Basit dil kullanımı",
+        "Yapılandırılmış içerik",
+        "Kolay takip edilebilir format"
+      ]
+    },
+    {
+      "id": "creativity",
+      "name": "Creativity", 
+      "description": "Yaratıcılık",
+      "color": "#f59e0b",
+      "icon": "🎨",
+      "features": [
+        "Yaratıcı ve özgün çözümler",
+        "İnovatif yaklaşımlar",
+        "Farklı perspektifler",
+        "Çok boyutlu düşünce"
+      ]
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "description": "Performans", 
+      "color": "#10b981",
+      "icon": "⚡",
+      "features": [
+        "Hızlı işlem süresi",
+        "Optimize edilmiş algoritmalar",
+        "Düşük kaynak kullanımı",
+        "Yüksek verimlilik"
+      ]
+    },
+    {
+      "id": "accuracy",
+      "name": "Accuracy",
+      "description": "Doğruluk",
+      "color": "#dc2626", 
+      "icon": "🎯",
+      "features": [
+        "Yüksek doğruluk oranı",
+        "Güvenilir sonuçlar",
+        "Detaylı doğrulama",
+        "Hassas analiz"
+      ]
+    }
+  ]
+}

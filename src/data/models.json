@@ -1,0 +1,137 @@
+{
+  "models": [
+    {
+      "id": "gpt-4o",
+      "name": "GPT-4o",
+      "description": "Most advanced model with multimodal capabilities",
+      "type": "advanced",
+      "cost": "high",
+      "pricing": {
+        "input": "$15.00 / 1M tokens",
+        "output": "$60.00 / 1M tokens",
+        "inputPerToken": 0.000015,
+        "outputPerToken": 0.00006,
+        "currency": "USD"
+      },
+      "priority": 1,
+      "active": true,
+      "capabilities": ["text", "image", "code"],
+      "maxTokens": 128000,
+      "provider": "OpenAI"
+    },
+    {
+      "id": "gpt-4o-mini",
+      "name": "GPT-4o Mini",
+      "description": "Fast and efficient model for most tasks",
+      "type": "balanced",
+      "cost": "low",
+      "pricing": {
+        "input": "$0.15 / 1M tokens",
+        "output": "$0.60 / 1M tokens",
+        "inputPerToken": 0.00000015,
+        "outputPerToken": 0.0000006,
+        "currency": "USD"
+      },
+      "priority": 2,
+      "active": true,
+      "capabilities": ["text", "code"],
+      "maxTokens": 128000,
+      "provider": "OpenAI"
+    },
+    {
+      "id": "gpt-4",
+      "name": "GPT-4",
+      "description": "Highly capable model for complex tasks",
+      "type": "advanced",
+      "cost": "high",
+      "pricing": {
+        "input": "$30.00 / 1M tokens",
+        "output": "$60.00 / 1M tokens",
+        "inputPerToken": 0.00003,
+        "outputPerToken": 0.00006,
+        "currency": "USD"
+      },
+      "priority": 3,
+      "active": true,
+      "capabilities": ["text", "code"],
+      "maxTokens": 8192,
+      "provider": "OpenAI"
+    },
+    {
+      "id": "deepseek-chat",
+      "name": "DeepSeek Chat",
+      "description": "Efficient model for general conversations",
+      "type": "balanced",
+      "cost": "low",
+      "pricing": {
+        "input": "$0.14 / 1M tokens",
+        "output": "$0.28 / 1M tokens",
+        "inputPerToken": 0.00000014,
+        "outputPerToken": 0.00000028,
+        "currency": "USD"
+      },
+      "priority": 4,
+      "active": true,
+      "capabilities": ["text"],
+      "maxTokens": 32000,
+      "provider": "DeepSeek"
+    },
+    {
+      "id": "deepseek-reasoning",
+      "name": "DeepSeek Reasoning",
+      "description": "Advanced reasoning and problem-solving model",
+      "type": "reasoning",
+      "cost": "medium",
+      "pricing": {
+        "input": "$0.55 / 1M tokens",
+        "output": "$2.19 / 1M tokens",
+        "inputPerToken": 0.00000055,
+        "outputPerToken": 0.00000219,
+        "currency": "USD"
+      },
+      "priority": 5,
+      "active": true,
+      "capabilities": ["text", "reasoning"],
+      "maxTokens": 32000,
+      "provider": "DeepSeek"
+    },
+    {
+      "id": "grok-2",
+      "name": "Grok-2",
+      "description": "Real-time information with humor",
+      "type": "fast",
+      "cost": "medium",
+      "pricing": {
+        "input": "$2.00 / 1M tokens",
+        "output": "$10.00 / 1M tokens",
+        "inputPerToken": 0.000002,
+        "outputPerToken": 0.00001,
+        "currency": "USD"
+      },
+      "priority": 6,
+      "active": true,
+      "capabilities": ["text", "realtime"],
+      "maxTokens": 131072,
+      "provider": "X.AI"
+    },
+    {
+      "id": "o3-mini",
+      "name": "O3-Mini",
+      "description": "Latest generation reasoning model",
+      "type": "reasoning",
+      "cost": "high",
+      "pricing": {
+        "input": "$60.00 / 1M tokens",
+        "output": "$240.00 / 1M tokens",
+        "inputPerToken": 0.00006,
+        "outputPerToken": 0.00024,
+        "currency": "USD"
+      },
+      "priority": 7,
+      "active": true,
+      "capabilities": ["text", "reasoning", "math"],
+      "maxTokens": 200000,
+      "provider": "OpenAI"
+    }
+  ]
+}

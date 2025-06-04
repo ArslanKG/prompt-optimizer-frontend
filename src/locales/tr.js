@@ -72,10 +72,10 @@ export const tr = {
         title: '4 Farklı Strateji',
         description: 'İhtiyacınıza göre hız, kalite, maliyet veya konsensüs stratejisi seçin.',
         details: [
-          'Quality: En kaliteli ve detaylı yanıtlar',
-          'Speed: 3 saniyeden kısa sürede yanıt',
-          'Consensus: Çoklu model karşılaştırması',
-          'Cost-Effective: Bütçe dostu çözümler'
+          'Kalite: En kaliteli ve detaylı yanıtlar',
+          'Hız: 3 saniyeden kısa sürede yanıt',
+          'Uzlaşı: Çoklu model karşılaştırması',
+          'Maliyet Odaklı: Bütçe dostu çözümler'
         ],
       },
       analytics: {
@@ -134,6 +134,11 @@ export const tr = {
       description1: 'Arkegu AI, kullanıcıların AI modellerinden en verimli şekilde yararlanmalarını sağlamak için geliştirilmiş bir platformdur.',
       description2: 'Amacımız, karmaşık AI teknolojilerini herkes için erişilebilir ve kullanımı kolay hale getirmektir.',
     },
+    vision: {
+      title: 'Vizyonumuz',
+      description1: 'Yapay zeka destekli prompt optimizasyonunda dünya lideri olmak ve dijital içerik üretiminde devrim yaratmak.',
+      description2: 'AI-insan işbirliğinde yeni standartlar belirleyerek, yaratıcılık ve teknolojinin mükemmel uyumunu sağlamak.',
+    },
     features: [
       'Multi-model AI desteği ile en iyi sonuçları alın',
       'Prompt optimizasyonu ile daha etkili sorgular',
@@ -185,7 +190,7 @@ export const tr = {
     },
     emptyState: {
       title: 'Arkegu AI\'ya Hoş Geldiniz',
-      description: 'Prompt\'larınızı optimize etmek için aşağıdaki alana yazın ve gönder butonuna tıklayın.',
+      description: 'Gelişmiş prompt optimizasyonuyla sen de yapay zekayı dene! Mesajını yaz ve yapay zekanın gücünü keşfet.',
     },
     messages: {
       user: 'Sen',
@@ -205,41 +210,46 @@ export const tr = {
       name: 'Yaratıcılık',
       description: 'Daha yaratıcı ve özgün',
     },
-    conciseness: {
-      name: 'Özlülük',
-      description: 'Daha kısa ve öz',
+    performance: {
+      name: 'Performans',
+      description: 'Daha hızlı ve verimli',
     },
-    detail: {
-      name: 'Detay',
-      description: 'Daha detaylı ve kapsamlı',
+    accuracy: {
+      name: 'Doğruluk',
+      description: 'Daha doğru ve kesin',
     },
   },
 
   // Strategies
   strategies: {
     quality: {
-      name: 'Quality',
+      name: 'Kalite',
       description: 'En yüksek kalite',
     },
     speed: {
-      name: 'Speed',
+      name: 'Hız',
       description: 'En hızlı yanıt',
     },
-    consensus: {
-      name: 'Consensus',
-      description: 'Çoklu model uzlaşısı',
-    },
-    costEffective: {
-      name: 'Cost-Effective',
+    cost_effective: {
+      name: 'Maliyet Odaklı',
       description: 'Maliyet odaklı',
+    },
+    reasoning: {
+      name: 'Muhakeme',
+      description: 'Gelişmiş muhakeme',
+    },
+    creative: {
+      name: 'Yaratıcı',
+      description: 'Yaratıcı çözümler',
     },
   },
 
   // Footer
   footer: {
-    copyright: '© 2024 Arkegu AI. Tüm hakları saklıdır.',
-    builtWith: 'Built with',
-    and: 'and',
+    copyright: 'Tüm hakları saklıdır.',
+    builtWith: 'Geliştirildi:',
+    and: 've',
+    contact: 'İletişim',
   },
 
   // Error Messages
@@ -260,5 +270,97 @@ export const tr = {
     updated: 'Başarıyla güncellendi',
     deleted: 'Başarıyla silindi',
     sent: 'Başarıyla gönderildi',
+    copied: 'Kopyalandı!',
+  },
+
+  // Authentication
+  auth: {
+    welcomeBack: 'Hoş Geldiniz',
+    createAccount: 'Hesap Oluştur',
+    login: 'Giriş Yap',
+    register: 'Kayıt Ol',
+    username: 'Kullanıcı Adı',
+    password: 'Şifre',
+    email: 'E-posta',
+    confirmPassword: 'Şifreyi Onayla',
+    signIn: 'Giriş Yap',
+    signUp: 'Kayıt Ol',
+    signOut: 'Çıkış Yap',
+    forgotPassword: 'Şifremi Unuttum',
+    rememberMe: 'Beni Hatırla',
+  },
+
+  // Session Management
+  sessions: {
+    newChat: 'Yeni Sohbet',
+    sessionOptions: 'Oturum Seçenekleri',
+    deleteSession: 'Oturumu Sil',
+    loadingSessions: 'Oturumlar yükleniyor...',
+    noSessions: 'Henüz sohbet oturumu yok. Yeni bir konuşma başlatın!',
+    signInToSave: 'Sohbet geçmişinizi kaydetmek ve erişmek için giriş yapın',
+    savedSessions: 'kaydedilmiş oturum',
+    sessionDeleted: 'Oturum başarıyla silindi',
+    failedToDelete: 'Oturum silinemedi',
+    failedToLoad: 'Sohbet oturumları yüklenemedi',
+    messages: 'mesaj',
+    searchConversations: 'Konuşmaları ara',
+    today: 'Bugün',
+    yesterday: 'Dün',
+    previous7Days: 'Önceki 7 gün',
+    welcomeToArkegu: 'Arkegu AI\'ya Hoş Geldiniz',
+  },
+
+  // Chat Settings
+  chatSettings: {
+    title: 'Sohbet Ayarları',
+    chatMode: 'Sohbet Modu',
+    strategyMode: 'Strateji Modu',
+    directModel: 'Direkt Model',
+    strategyModeDescription: 'Strateji modu belirli amaçlar için optimize edilmiş AI yapılandırmaları kullanır',
+    directModelDescription: 'Direkt model modu size model seçimi ve parametreleri üzerinde tam kontrol sağlar',
+    optimizationStrategy: 'Optimizasyon Stratejisi',
+    optimizationType: 'Optimizasyon Türü',
+    modelSelection: 'Model Seçimi',
+    temperature: 'Sıcaklık',
+    currentStrategyFeatures: 'Mevcut Strateji Özellikleri',
+    memorySettings: 'Hafıza Ayarları',
+    enableMemory: 'Konuşma hafızasını etkinleştir',
+    memoryDescription: 'Önceki mesajları bağlam için hatırla',
+    contextWindowSize: 'Hafıza Boyutu',
+    contextWindowDescription: 'Hatırlanacak önceki mesaj sayısı',
+    messagesCount: 'mesaj',
+  },
+
+  // Memory and Settings
+  memory: {
+    sessionMemory: 'Oturum Belleği',
+    enableMemory: 'Konuşma belleğini etkinleştir',
+    memoryDescription: 'Bu oturumda önceki mesajları bağlam için hatırla',
+    contextWindow: 'Bağlam Penceresi Boyutu',
+    contextDescription: 'Bağlam olarak dahil edilecek önceki mesaj sayısı',
+    memoryOn: 'Bellek Açık',
+    memoryOff: 'Bellek Kapalı',
+  },
+
+  // Copy and Actions
+  actions: {
+    copy: 'Kopyala',
+    copyResponse: 'Yanıtı Kopyala',
+    expand: 'Genişlet',
+    collapse: 'Daralt',
+    showMore: 'Daha Fazla Göster',
+    showLess: 'Daha Az Göster',
+  },
+
+  // Premium Chat
+  premiumChat: {
+    messagePlaceholder: 'Premium Chat\'e mesaj yaz...',
+    messageSentError: 'Mesaj gönderilemedi. Lütfen tekrar deneyin.',
+    messageCopied: 'Mesaj kopyalandı!',
+    sessionLoadError: 'Oturum yüklenemedi',
+    logoutTitle: 'Çıkış Yap',
+    logoutConfirmation: 'hesabından çıkış yapmak istediğinizden emin misiniz?',
+    cancel: 'İptal',
+    logout: 'Çıkış Yap',
   },
 };

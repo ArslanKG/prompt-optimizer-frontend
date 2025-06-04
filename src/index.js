@@ -2,7 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+// import reportWebVitals from './reportWebVitals';
+
+// Suppress ResizeObserver errors that are not critical
+const resizeObserverErrorHandler = (e) => {
+  if (e.message === 'ResizeObserver loop completed with undelivered notifications.') {
+    // This is a known issue and can be safely ignored
+    return true;
+  }
+  return false;
+};
+
+
+// Global error handler for unhandled promise rejections and other errors
+window.addEventListener('error', (event) => {
+  if (resizeObserverErrorHandler(event.error)) {
+    event.preventDefault();
+    return;
+  }
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  if (event.reason && resizeObserverErrorHandler(event.reason)) {
+    event.preventDefault();
+    return;
+  }
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -11,7 +36,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals(); // Disabled to prevent external analytics calls

@@ -1,0 +1,124 @@
+{
+  "mcpServers": {
+    "prompt-optimizer": {
+      "command": "node",
+      "args": ["./mcp-server/index.js"],
+      "env": {
+        "SERVER_NAME": "prompt-optimizer-frontend-reference",
+        "SERVER_VERSION": "2.0.0",
+        "LOG_LEVEL": "info"
+      },
+      "disabled": false,
+      "alwaysAllow": [],
+      "timeout": 30
+    }
+  },
+  "metadata": {
+    "name": "Prompt Optimizer Frontend Reference MCP Configuration",
+    "description": "MCP server providing reference data and guidance for frontend and AI assistant",
+    "version": "2.0.0",
+    "created": "2025-06-03",
+    "lastModified": "2025-06-03",
+    "author": "Prompt Optimizer Team",
+    "purpose": "Frontend reference and AI assistant guidance - optimization handled by backend"
+  },
+  "documentation": {
+    "tools": [
+      {
+        "name": "get_frontend_guidance",
+        "description": "Get development guidance for UI/UX, state management, and performance",
+        "parameters": [
+          "section (optional): Specific guidance section (ui-ux, state-management, performance, all)"
+        ]
+      },
+      {
+        "name": "compare_models",
+        "description": "Compare different AI models for reference purposes",
+        "parameters": [
+          "models (optional): Models to compare",
+          "criteria (optional): Comparison criteria (cost, speed, quality, capabilities)",
+          "useCase (optional): Specific use case for comparison"
+        ]
+      }
+    ],
+    "resources": [
+      {
+        "uri": "prompt://strategies",
+        "description": "Get available optimization strategies with details and features for frontend display"
+      },
+      {
+        "uri": "prompt://models",
+        "description": "Get available AI models with pricing and capabilities for frontend reference"
+      },
+      {
+        "uri": "prompt://optimization-types",
+        "description": "Get optimization types (clarity, performance, creativity, accuracy) for frontend UI"
+      },
+      {
+        "uri": "prompt://best-practices",
+        "description": "Get prompt writing best practices guide for AI assistant guidance"
+      },
+      {
+        "uri": "prompt://templates",
+        "description": "Get ready-made prompt templates for AI assistant reference"
+      }
+    ]
+  },
+  "setup": {
+    "requirements": [
+      "Node.js 18+ installed",
+      "npm package manager",
+      "No external API dependencies - all data is static"
+    ],
+    "installation": [
+      "1. Navigate to the mcp-server directory",
+      "2. Run 'npm install' to install dependencies",
+      "3. The server provides reference data only",
+      "4. Optimization processing handled by backend API"
+    ],
+    "configuration": [
+      "SERVER_NAME: Server identifier (default: prompt-optimizer-frontend-reference)",
+      "SERVER_VERSION: Version identifier (default: 2.0.0)",
+      "LOG_LEVEL: Logging verbosity (default: info)"
+    ]
+  },
+  "examples": {
+    "get_frontend_guidance": {
+      "description": "Get UI/UX guidance for frontend development",
+      "usage": "Use tool 'get_frontend_guidance' with parameters: {'section': 'ui-ux'}"
+    },
+    "compare_models": {
+      "description": "Compare AI models for reference",
+      "usage": "Use tool 'compare_models' with parameters: {'criteria': ['cost', 'speed', 'quality']}"
+    },
+    "get_strategies": {
+      "description": "Get available optimization strategies for frontend display",
+      "usage": "Access resource 'prompt://strategies'"
+    },
+    "get_models": {
+      "description": "Get AI models data for frontend reference",
+      "usage": "Access resource 'prompt://models'"
+    },
+    "get_optimization_types": {
+      "description": "Get optimization types for frontend UI",
+      "usage": "Access resource 'prompt://optimization-types'"
+    },
+    "get_best_practices": {
+      "description": "Get best practices for AI assistant",
+      "usage": "Access resource 'prompt://best-practices'"
+    },
+    "get_templates": {
+      "description": "Get prompt templates for AI assistant",
+      "usage": "Access resource 'prompt://templates'"
+    }
+  },
+  "notes": {
+    "important": [
+      "This server provides REFERENCE DATA ONLY",
+      "Prompt optimization is handled by the backend API",
+      "No external API dependencies - all data is static",
+      "Designed for frontend and AI assistant support"
+    ],
+    "migration": "Migrated from v1.0.0 comprehensive server to v2.0.0 reference-only server"
+  }
+}

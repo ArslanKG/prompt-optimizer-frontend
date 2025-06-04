@@ -43,9 +43,15 @@ const Models = () => {
     const fetchModels = async () => {
       try {
         const data = await optimizationApi.getModels();
-        setModels(data);
+        // Convert array to object with id as key for compatibility
+        const modelsObject = {};
+        data.forEach(model => {
+          modelsObject[model.id] = model;
+        });
+        setModels(modelsObject);
       } catch (error) {
-        console.error('Failed to fetch models:', error);
+        // If API fails, the optimizationApi.getModels() will return fallback data from models.json
+        setModels({});
       } finally {
         setLoading(false);
       }
@@ -75,10 +81,10 @@ const Models = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              {t.models.title}
+              {t('models.title')}
             </Typography>
             <Typography variant="h5" color="text.secondary">
-              {t.models.subtitle}
+              {t('models.subtitle')}
             </Typography>
           </Box>
 
@@ -95,39 +101,39 @@ const Models = () => {
             }}
           >
             <Grid container spacing={6} justifyContent="center" alignItems="center">
-              <Grid item xs={12} md={3}>
+              <Grid size={{ xs: 12, md: 3 }}>
                 <Box sx={{ textAlign: 'center' }}>
                   <SpeedIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.fast, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">{t.models.types.fast.name}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t('models.types.fast.name')}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t.models.types.fast.description}
+                    {t('models.types.fast.description')}
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid size={{ xs: 12, md: 3 }}>
                 <Box sx={{ textAlign: 'center' }}>
                   <BalanceIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.balanced, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">{t.models.types.balanced.name}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t('models.types.balanced.name')}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t.models.types.balanced.description}
+                    {t('models.types.balanced.description')}
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid size={{ xs: 12, md: 3 }}>
                 <Box sx={{ textAlign: 'center' }}>
                   <PsychologyIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.advanced, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">{t.models.types.advanced.name}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t('models.types.advanced.name')}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t.models.types.advanced.description}
+                    {t('models.types.advanced.description')}
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid size={{ xs: 12, md: 3 }}>
                 <Box sx={{ textAlign: 'center' }}>
                   <ReasoningIcon sx={{ fontSize: 40, color: MODEL_TYPE_COLORS.reasoning, mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">{t.models.types.reasoning.name}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{t('models.types.reasoning.name')}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t.models.types.reasoning.description}
+                    {t('models.types.reasoning.description')}
                   </Typography>
                 </Box>
               </Grid>
@@ -181,53 +187,82 @@ const Models = () => {
                         
                         <Box sx={{ flexGrow: 1 }}>
                           <Typography variant="h6" fontWeight="bold">
-                            {model.id}
+                            {model.name || model.id}
                           </Typography>
-                          <Chip
-                            label={t.models.types[model.type]?.name || model.type}
-                            size="small"
-                            sx={{
-                              backgroundColor: `${MODEL_TYPE_COLORS[model.type]}20`,
-                              color: MODEL_TYPE_COLORS[model.type],
-                              fontWeight: 'medium',
-                              mr: 1,
-                            }}
-                          />
-                          {model.isEnabled !== false && (
+                          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                            {model.description}
+                          </Typography>
+                          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                             <Chip
-                              label={t.models.labels.active}
+                              label={t(`models.types.${model.type}.name`) || model.type}
                               size="small"
-                              color="success"
+                              sx={{
+                                backgroundColor: `${MODEL_TYPE_COLORS[model.type]}20`,
+                                color: MODEL_TYPE_COLORS[model.type],
+                                fontWeight: 'medium',
+                              }}
                             />
+                            {model.provider && (
+                              <Chip
+                                label={model.provider}
+                                size="small"
+                                variant="outlined"
+                                sx={{ fontSize: '0.7rem' }}
+                              />
+                            )}
+                            {(model.active !== false && model.isEnabled !== false) && (
+                              <Chip
+                                label={t('models.labels.active')}
+                                size="small"
+                                color="success"
+                              />
+                            )}
+                          </Box>
+                        </Box>
+                        
+                        <Box sx={{ mx: 3, width: '25%' }}>
+                          <Typography variant="body2" color="text.secondary" gutterBottom>
+                            {t('models.labels.cost')}
+                          </Typography>
+                          {model.pricing ? (
+                            <Box>
+                              <Typography variant="body2" fontWeight="bold" color="primary">
+                                Input: {model.pricing.input}
+                              </Typography>
+                              <Typography variant="body2" fontWeight="bold" color="secondary">
+                                Output: {model.pricing.output}
+                              </Typography>
+                            </Box>
+                          ) : (
+                            <Typography variant="h6" color="primary">
+                              ${model.cost}
+                            </Typography>
                           )}
                         </Box>
                         
-                        <Box sx={{ mx: 3, width: '20%' }}>
+                        <Box sx={{ width: '25%' }}>
                           <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {t.models.labels.cost}
+                            {t('models.labels.priority')}
                           </Typography>
-                          <Typography variant="h6" color="primary">
-                            ${model.cost}
-                          </Typography>
-                        </Box>
-                        
-                        <Box sx={{ width: '30%' }}>
-                          <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {t.models.labels.priority}
-                          </Typography>
-                          <LinearProgress
-                            variant="determinate"
-                            value={(model.priority / 3) * 100}
-                            sx={{
-                              height: 8,
-                              borderRadius: 4,
-                              backgroundColor: theme.palette.grey[200],
-                              '& .MuiLinearProgress-bar': {
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <LinearProgress
+                              variant="determinate"
+                              value={Math.max(0, 100 - ((model.priority - 1) / 6) * 100)}
+                              sx={{
+                                flexGrow: 1,
+                                height: 8,
                                 borderRadius: 4,
-                                backgroundColor: MODEL_TYPE_COLORS[model.type] || theme.palette.primary.main,
-                              },
-                            }}
-                          />
+                                backgroundColor: theme.palette.grey[200],
+                                '& .MuiLinearProgress-bar': {
+                                  borderRadius: 4,
+                                  backgroundColor: MODEL_TYPE_COLORS[model.type] || theme.palette.primary.main,
+                                },
+                              }}
+                            />
+                            <Typography variant="body2" fontWeight="bold">
+                              #{model.priority}
+                            </Typography>
+                          </Box>
                         </Box>
                       </Box>
                     </motion.div>

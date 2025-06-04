@@ -1,0 +1,30 @@
+{
+  "name": "prompt-optimizer-frontend-reference",
+  "version": "2.0.0",
+  "description": "Frontend reference MCP server providing guidance and data for prompt optimization",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "frontend-reference",
+    "prompt-optimization",
+    "ai-guidance",
+    "llm"
+  ],
+  "author": "Prompt Optimizer Team",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.22.4",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -4,7 +4,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 
 const LoadingSpinner = ({ message }) => {
   const { t } = useTranslation();
-  const displayMessage = message || t.common.loading;
+  const displayMessage = message || t('common.loading');
 
   return (
     <Box

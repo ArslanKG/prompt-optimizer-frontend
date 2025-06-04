@@ -9,7 +9,6 @@ import {
   Tooltip,
   useTheme,
   Collapse,
-  Divider,
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -144,38 +143,44 @@ const ChatMessage = memo(({ message, isUser, result }) => {
 
   const handleCopy = useCallback((text) => {
     navigator.clipboard.writeText(text);
-    toast.success(t.success.copied || 'Copied!');
+    toast.success(t('success.copied') || 'Copied!');
   }, [t]);
 
   const toggleExpanded = useCallback(() => {
     setExpanded(prev => !prev);
   }, []);
 
-  // Memoize avatar styles
+  // Minimal ChatGPT-style avatar
   const avatarSx = useMemo(() => ({
+    width: 32,
+    height: 32,
     bgcolor: isUser
-      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-      : theme.palette.grey[700],
-    width: 40,
-    height: 40,
-  }), [isUser, theme.palette.grey]);
+      ? theme.palette.mode === 'dark' ? '#6E61CC' : '#6E61CC'
+      : theme.palette.mode === 'dark' ? '#4a5568' : '#e2e8f0',
+    color: isUser ? 'white' : theme.palette.text.primary,
+    fontSize: '0.9rem',
+    fontWeight: 500,
+  }), [isUser, theme.palette.mode, theme.palette.text.primary]);
 
-  // Memoize paper styles
-  const paperSx = useMemo(() => ({
+  // ChatGPT-style message container
+  const messageContainerSx = useMemo(() => ({
     p: 3,
     borderRadius: 3,
-    backgroundColor: isUser
-      ? theme.palette.mode === 'dark'
-        ? 'rgba(99, 102, 241, 0.2)'
-        : 'rgba(99, 102, 241, 0.1)'
-      : theme.palette.mode === 'dark'
-      ? 'rgba(30, 41, 59, 0.5)'
-      : 'rgba(248, 250, 252, 0.8)',
-    backdropFilter: 'blur(10px)',
-    border: `1px solid ${theme.palette.divider}`,
-    position: 'relative',
-    minWidth: '300px',
-  }), [isUser, theme.palette.mode, theme.palette.divider]);
+    maxWidth: '100%',
+    fontFamily: 'Inter, sans-serif',
+    
+    // User messages: transparent border like ChatGPT
+    ...(isUser && {
+      border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
+      bgcolor: 'transparent',
+    }),
+    
+    // Assistant messages: no border, just background color difference
+    ...(!isUser && {
+      bgcolor: 'transparent', // No background for assistant like ChatGPT
+      border: 'none',
+    }),
+  }), [isUser, theme.palette.mode]);
 
   // Optimized content rendering with basic markdown support
   const renderContent = useMemo(() => {
@@ -264,33 +269,42 @@ const ChatMessage = memo(({ message, isUser, result }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* ChatGPT-style full width layout */}
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: isUser ? 'flex-end' : 'flex-start',
-          mb: 3,
+          width: '100%',
+          mb: 6,
+          px: { xs: 3, md: 6 },
+          py: 4,
+          // User messages get subtle background like ChatGPT
+          ...(isUser && {
+            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
+          }),
         }}
       >
         <Box
           sx={{
+            maxWidth: '768px', // ChatGPT content width
+            mx: 'auto',
             display: 'flex',
-            flexDirection: isUser ? 'row-reverse' : 'row',
+            gap: 3,
             alignItems: 'flex-start',
-            gap: 2,
-            maxWidth: '85%',
           }}
         >
+          {/* Small Avatar */}
           <Avatar sx={avatarSx}>
             {isUser ? <PersonIcon /> : <BotIcon />}
           </Avatar>
           
-          <Paper elevation={0} sx={paperSx}>
+          {/* Message Content */}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            {/* Assistant metadata */}
             {!isUser && result && (
               <Box sx={{ mb: 2 }}>
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
                   <Chip
                     icon={<SpeedIcon />}
-                    label={`${t.strategies[result.strategy]?.name || result.strategy} ${t.chat.strategy.toLowerCase()}`}
+                    label={`${t(`strategies.${result.strategy}.name`) || result.strategy} ${t('chat.strategy').toLowerCase()}`}
                     size="small"
                     color="primary"
                     variant="outlined"
@@ -316,12 +330,12 @@ const ChatMessage = memo(({ message, isUser, result }) => {
                 <Collapse in={expanded}>
                   <Box sx={{ mt: 1, p: 2, bgcolor: 'action.hover', borderRadius: 2 }}>
                     <Typography variant="caption" color="text.secondary">
-                      {t.models.title}: {result.modelsUsed?.join(', ')}
+                      {t('models.title')}: {result.modelsUsed?.join(', ')}
                     </Typography>
                     {result.optimizedPrompt && result.optimizedPrompt !== message && (
                       <Box sx={{ mt: 1 }}>
                         <Typography variant="caption" color="text.secondary">
-                          Optimized prompt:
+                          {t('chat.optimizedPrompt') || 'Optimized prompt'}:
                         </Typography>
                         <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
                           "{result.optimizedPrompt}"
@@ -333,30 +347,33 @@ const ChatMessage = memo(({ message, isUser, result }) => {
               </Box>
             )}
             
-            <Box sx={{ position: 'relative' }}>
-              {renderContent}
-              
-              {!isUser && (
-                <Tooltip title="Copy response">
-                  <IconButton
-                    size="small"
-                    onClick={() => handleCopy(message)}
-                    sx={{
-                      position: 'absolute',
-                      top: -40,
-                      right: -8,
-                      opacity: 0.7,
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                  >
-                    <CopyIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              )}
+            {/* Message Container */}
+            <Box sx={messageContainerSx}>
+              <Box sx={{ position: 'relative' }}>
+                {renderContent}
+                
+                {!isUser && (
+                  <Tooltip title={t('actions.copyResponse')}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleCopy(message)}
+                      sx={{
+                        position: 'absolute',
+                        top: -8,
+                        right: -8,
+                        opacity: 0.7,
+                        '&:hover': {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      <CopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
             </Box>
-          </Paper>
+          </Box>
         </Box>
       </Box>
     </motion.div>

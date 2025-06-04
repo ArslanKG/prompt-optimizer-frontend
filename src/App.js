@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import useOptimizationStore from './store/optimizationStore';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import Models from './pages/Models';
 import About from './pages/About';
-import { useLocalStorage } from './hooks/useLocalStorage';
 import Chat from './pages/Chat';
+import PremiumChat from './pages/PremiumChat';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import { TranslationProvider } from './contexts/TranslationContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './contexts/AuthContext';
 
-function App() {
+// App Content with routing logic
+function AppContent() {
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', true);
   const { loadInitialData } = useOptimizationStore();
+  const { isAuthenticated } = useAuth();
 
   const theme = createTheme({
     palette: {
@@ -80,33 +86,95 @@ function App() {
   };
 
   return (
-    <TranslationProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: darkMode ? '#1e293b' : '#fff',
-              color: darkMode ? '#fff' : '#0f172a',
-              borderRadius: '12px',
-              padding: '16px',
-            },
-          }}
-        />
-        <Router>
-          <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/models" element={<Models />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/chat" element={<Chat />} />
-            </Routes>
-          </Layout>
-        </Router>
-      </ThemeProvider>
-    </TranslationProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: darkMode ? '#1e293b' : '#fff',
+            color: darkMode ? '#fff' : '#0f172a',
+            borderRadius: '12px',
+            padding: '16px',
+          },
+        }}
+      />
+      <Router>
+        <Routes>
+          {/* Premium Chat Route - Only for authenticated users */}
+          <Route
+            path="/premium/chat/:sessionId?"
+            element={
+              <ProtectedRoute requireAuth={true}>
+                <PremiumChat />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Public Routes - Redirect authenticated users to premium chat */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute redirectIfAuth={true}>
+                <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
+                  <Home />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/models"
+            element={
+              <ProtectedRoute redirectIfAuth={true}>
+                <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
+                  <Models />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute redirectIfAuth={true}>
+                <Layout darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
+                  <About />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute redirectIfAuth={true}>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Catch all route - redirect based on auth status */}
+          <Route
+            path="*"
+            element={
+              isAuthenticated ?
+                <Navigate to="/premium/chat" replace /> :
+                <Navigate to="/" replace />
+            }
+          />
+        </Routes>
+      </Router>
+    </ThemeProvider>
+  );
+}
+
+// Main App Component
+function App() {
+  return (
+    <AuthProvider>
+      <TranslationProvider>
+        <AppContent />
+      </TranslationProvider>
+    </AuthProvider>
   );
 }
 

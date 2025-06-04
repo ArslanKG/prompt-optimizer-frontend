@@ -26,13 +26,13 @@ const About = () => {
   const theme = useTheme();
   const { t } = useTranslation();
   
-  const features = t.about.features;
+  const features = t('about.features');
   
   const techStack = [
-    { icon: <CodeIcon />, title: t.about.technologies.stack.backend.title, tech: t.about.technologies.stack.backend.tech, color: '#667eea' },
-    { icon: <AIIcon />, title: t.about.technologies.stack.ai.title, tech: t.about.technologies.stack.ai.tech, color: '#764ba2' },
-    { icon: <SpeedIcon />, title: t.about.technologies.stack.frontend.title, tech: t.about.technologies.stack.frontend.tech, color: '#f59e0b' },
-    { icon: <SecurityIcon />, title: t.about.technologies.stack.security.title, tech: t.about.technologies.stack.security.tech, color: '#10b981' },
+    { icon: <CodeIcon />, title: t('about.technologies.stack.backend.title'), tech: t('about.technologies.stack.backend.tech'), color: '#667eea' },
+    { icon: <AIIcon />, title: t('about.technologies.stack.ai.title'), tech: t('about.technologies.stack.ai.tech'), color: '#764ba2' },
+    { icon: <SpeedIcon />, title: t('about.technologies.stack.frontend.title'), tech: t('about.technologies.stack.frontend.tech'), color: '#f59e0b' },
+    { icon: <SecurityIcon />, title: t('about.technologies.stack.security.title'), tech: t('about.technologies.stack.security.tech'), color: '#10b981' },
   ];
   
   return (
@@ -52,15 +52,16 @@ const About = () => {
               fontWeight="bold"
               gutterBottom
             >
-              {t.about.title}
+              {t('about.title')}
             </Typography>
             <Typography variant="h5" color="text.secondary" sx={{ maxWidth: 800, mx: 'auto' }}>
-              {t.about.subtitle}
+              {t('about.subtitle')}
             </Typography>
           </Box>
           
           <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
+            {/* Mission Section */}
+            <Grid size={{ xs: 12, md: 6 }}>
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -80,13 +81,13 @@ const About = () => {
                   }}
                 >
                   <Typography variant="h4" fontWeight="bold" gutterBottom>
-                    {t.about.mission.title}
+                    {t('about.mission.title')}
                   </Typography>
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    {t.about.mission.description1}
+                    {t('about.mission.description1')}
                   </Typography>
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    {t.about.mission.description2}
+                    {t('about.mission.description2')}
                   </Typography>
                   <List>
                     {features.map((feature, index) => (
@@ -108,92 +109,129 @@ const About = () => {
                 </Paper>
               </motion.div>
             </Grid>
-            
-            <Grid item xs={12} md={6} style= {{width: '100%' }}>
+
+            {/* Vision Section */}
+            <Grid size={{ xs: 12, md: 6 }}>
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 3 }}>
-                  {t.about.technologies.title}
-                </Typography>
-                
                 <Paper
                   elevation={0}
                   sx={{
-                    p: 5,
-                    mb: 3,
-                    width: '100%',
-                    flexGrow: 1,
+                    p: 4,
+                    height: '100%',
                     borderRadius: 3,
                     background: theme.palette.mode === 'dark'
-                      ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)'
-                      : 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                      ? 'rgba(30, 41, 59, 0.5)'
+                      : 'rgba(248, 250, 252, 0.8)',
+                    backdropFilter: 'blur(10px)',
                     border: `1px solid ${theme.palette.divider}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                   }}
                 >
-                  <Grid container spacing={4}>
-                    {techStack.map((item, index) => (
-                      <Grid item xs={6} key={index}>
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                        >
-                          <Box sx={{ textAlign: 'center' }}>
-                            <Box
-                              sx={{
-                                fontSize: 40,
-                                color: item.color,
-                                mb: 1,
-                                display: 'flex',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              {React.cloneElement(item.icon, { sx: { fontSize: 40 } })}
-                            </Box>
-                            <Typography variant="h6" fontWeight="bold">
-                              {item.title}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {item.tech}
-                            </Typography>
-                          </Box>
-                        </motion.div>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Paper>
-                
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 3,
-                    width: '100%',
-                    borderRadius: 3,
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    textAlign: 'center',
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold" gutterBottom>
-                    {t.about.contact.title}
+                  <Typography variant="h4" fontWeight="bold" gutterBottom>
+                    {t('about.vision.title')}
                   </Typography>
-                  <Typography variant="body2">
-                    {t.about.contact.description}
+                  <Typography variant="body1" color="text.secondary" paragraph>
+                    {t('about.vision.description1')}
                   </Typography>
-                  <Typography variant="body2" sx={{ mt: 1 }}>
-                    {t.about.contact.email}
+                  <Typography variant="body1" color="text.secondary" paragraph>
+                    {t('about.vision.description2')}
                   </Typography>
                 </Paper>
               </motion.div>
             </Grid>
+            
           </Grid>
+
+          {/* Technologies Section */}
+          <Box sx={{ mt: 6 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
+                {t('about.technologies.title')}
+              </Typography>
+              
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 5,
+                  mb: 4,
+                  borderRadius: 3,
+                  background: theme.palette.mode === 'dark'
+                    ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)'
+                    : 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+                  border: `1px solid ${theme.palette.divider}`,
+                }}
+              >
+                <Grid container spacing={4}>
+                  {techStack.map((item, index) => (
+                    <Grid size={{ xs: 6, md: 3 }} key={index}>
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                      >
+                        <Box sx={{ textAlign: 'center' }}>
+                          <Box
+                            sx={{
+                              fontSize: 40,
+                              color: item.color,
+                              mb: 1,
+                              display: 'flex',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            {React.cloneElement(item.icon, { sx: { fontSize: 40 } })}
+                          </Box>
+                          <Typography variant="h6" fontWeight="bold">
+                            {item.title}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {item.tech}
+                          </Typography>
+                        </Box>
+                      </motion.div>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </motion.div>
+          </Box>
+
+          {/* Contact Section */}
+          <Box sx={{ mt: 4 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 4,
+                  borderRadius: 3,
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  {t('about.contact.title')}
+                </Typography>
+                <Typography variant="body2">
+                  {t('about.contact.description')}
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {t('about.contact.email')}
+                </Typography>
+              </Paper>
+            </motion.div>
+          </Box>
         </motion.div>
       </Container>
     </Box>
