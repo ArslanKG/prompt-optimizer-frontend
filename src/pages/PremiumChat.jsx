@@ -121,55 +121,9 @@ const MessageItem = ({ message, onCopy }) => {
             color: colors.textPrimary,
             fontSize: '15px',
             lineHeight: 1.6,
-            '& h1, & h2, & h3': {
-              color: colors.textPrimary,
-              margin: '12px 0 8px 0',
-              fontWeight: 600,
-            },
-            '& h1': { fontSize: '18px' },
-            '& h2': { fontSize: '16px' },
-            '& h3': { fontSize: '15px' },
-            '& strong': {
-              fontWeight: 600,
-              color: colors.textPrimary,
-            },
-            '& em': {
-              fontStyle: 'italic',
-              color: colors.textSecondary,
-            },
-            '& code': {
-              backgroundColor: colors.border,
-              color: colors.accent,
-              padding: '2px 4px',
-              borderRadius: '3px',
-              fontSize: '13px',
-              fontFamily: 'monospace',
-            },
-            '& pre': {
-              backgroundColor: colors.border,
-              color: colors.textPrimary,
-              padding: '12px',
-              borderRadius: '6px',
-              overflow: 'auto',
-              margin: '8px 0',
-            },
-            '& pre code': {
-              backgroundColor: 'transparent',
-              padding: 0,
-              fontSize: '13px',
-              fontFamily: 'monospace',
-            },
-            '& ul, & ol': {
-              margin: '8px 0',
-              paddingLeft: '20px',
-            },
-            '& li': {
-              margin: '4px 0',
-              color: colors.textPrimary,
-            },
-            '& br': {
-              lineHeight: 1.6,
-            },
+            maxWidth: '100%',
+            overflow: 'hidden',
+            // Remove all custom code/pre styles to let the new markdown renderer handle them
           }}
         >
           <MarkdownContent content={message.content} />
@@ -1188,10 +1142,21 @@ const PremiumChat = () => {
   const loadUserSessions = useCallback(async () => {
     try {
       setLoadingSessions(true);
+      console.group('🔍 [PREMIUM_CHAT_DEBUG] Starting loadUserSessions...');
+      console.log('🔗 User:', user?.username);
+      console.log('🔐 Token exists:', !!localStorage.getItem('jwt_token'));
       
       // First check cache
       const cachedSessions = getSessionsFromCache();
+      console.log('📦 [CACHE_DEBUG] Cache check result:', {
+        hasCachedSessions: !!cachedSessions,
+        sessionCount: cachedSessions?.length || 0,
+        isCacheValid: isCacheValid(),
+        cacheKeys: cachedSessions ? Object.keys(cachedSessions[0] || {}) : 'no cache'
+      });
+      
       if (cachedSessions && isCacheValid()) {
+        console.log('✅ [DEBUG] Using cached sessions');
         setSessions(cachedSessions);
         
         // Auto-create new session if no sessions exist
@@ -1255,16 +1220,74 @@ const PremiumChat = () => {
       }
       
       // Cache is invalid or doesn't exist, fetch from backend
-      console.log('Fetching sessions from backend');
+      console.log('🌐 [API_DEBUG] Cache invalid/empty, fetching from backend...');
+      console.log('🔗 API endpoint will be: /api/sessions?limit=20');
+      console.log('🔑 Auth token exists:', !!localStorage.getItem('jwt_token'));
+      console.log('🏠 Current URL:', window.location.href);
+      
       const userSessions = await sessionApi.getSessions(20); // Get last 20 sessions
+      console.log('📡 [API_RESPONSE_DEBUG] Raw API response:', userSessions);
+      console.log('📊 Response analysis:', {
+        type: typeof userSessions,
+        isArray: Array.isArray(userSessions),
+        hasData: !!userSessions,
+        keys: userSessions ? Object.keys(userSessions) : 'no data',
+        length: Array.isArray(userSessions) ? userSessions.length : 'not array'
+      });
+      
+      // Handle different response formats from backend
+      let sessionsArray = [];
+      
+      if (Array.isArray(userSessions)) {
+        console.log('✅ [DEBUG] Response is array, using directly');
+        sessionsArray = userSessions;
+      } else if (userSessions && typeof userSessions === 'object') {
+        console.log('🔧 [DEBUG] Response is object, checking for nested arrays...');
+        
+        // Check common response wrapper patterns
+        if (Array.isArray(userSessions.sessions)) {
+          console.log('✅ [DEBUG] Found sessions array in .sessions property');
+          sessionsArray = userSessions.sessions;
+        } else if (Array.isArray(userSessions.data)) {
+          console.log('✅ [DEBUG] Found sessions array in .data property');
+          sessionsArray = userSessions.data;
+        } else if (Array.isArray(userSessions.items)) {
+          console.log('✅ [DEBUG] Found sessions array in .items property');
+          sessionsArray = userSessions.items;
+        } else {
+          console.log('❌ [DEBUG] No valid array found in response object:', Object.keys(userSessions));
+          sessionsArray = [];
+        }
+      } else {
+        console.log('❌ [DEBUG] Invalid response format:', userSessions);
+        sessionsArray = [];
+      }
+      
+      console.log('📊 [DEBUG] Final sessions array:', { count: sessionsArray.length, firstItem: sessionsArray[0] });
       
       // Transform API sessions to component format
-      const transformedSessions = userSessions.map((session, index) => ({
+      console.log('🔄 [DEBUG] Transforming sessions. Raw data structure check:');
+      sessionsArray?.forEach((session, i) => {
+        console.log(`   Session ${i}:`, {
+          id: session.id,
+          sessionId: session.sessionId,
+          title: session.title,
+          createdAt: session.createdAt,
+          timestamp: session.timestamp,
+          messageCount: session.messageCount,
+          hasMessages: !!session.messages,
+          messagesLength: session.messages?.length
+        });
+      });
+      
+      const transformedSessions = (sessionsArray || []).map((session, index) => ({
         id: session.id || session.sessionId || `fallback-session-${Date.now()}-${index}`,
         title: session.title || session.messages?.[0]?.content?.substring(0, 50) + '...' || t('sessions.newChat'),
         timestamp: new Date(session.createdAt || session.timestamp || Date.now()),
         messageCount: session.messageCount || 0,
       })).filter(session => session.id && session.id !== 'undefined' && session.id !== 'null');
+      
+      console.log('✨ [DEBUG] Transformed sessions:', transformedSessions);
       
       // Save sessions list to cache
       saveSessionsToCache(transformedSessions);
@@ -1299,7 +1322,19 @@ const PremiumChat = () => {
         }
       }
     } catch (error) {
-      console.error('Failed to load user sessions:', error);
+      console.error('❌ [DEBUG] Failed to load user sessions:', error);
+      console.error('❌ [DEBUG] Error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers
+        }
+      });
+      
       logPremiumChatError(ERROR_TYPES.SESSION_LOAD, error, {
         context: 'loadUserSessions',
         backendFailed: true,
@@ -1334,6 +1369,7 @@ const PremiumChat = () => {
       setCurrentSession(newSession);
     } finally {
       setLoadingSessions(false);
+      console.groupEnd();
     }
   }, [currentSession, loadSessionMessages, createNewSession, navigate, sessionId, t]);
 
@@ -1353,16 +1389,27 @@ const PremiumChat = () => {
   const handleSendMessage = useCallback(async (content) => {
     if (!content.trim() || !currentSession) return;
     
+    console.group('📤 [MESSAGE_DEBUG] Starting handleSendMessage...');
+    console.log('💬 Message content:', content.substring(0, 100) + '...');
+    console.log('🎯 Current session:', currentSession?.id);
+    console.log('⚙️ Settings:', { useStrategy, strategy, selectedModel, temperature });
+    
     setIsTyping(true);
     
     try {
       // Set prompt and optimize using store
+      console.log('📝 Setting prompt in store...');
       useOptimizationStore.getState().setPrompt(content);
+      
+      console.log('🚀 Calling optimize function...');
       await optimize();
       
       // Get updated history from store after optimization
       const updatedHistory = useOptimizationStore.getState().history;
-      console.log('Updated history after optimize:', updatedHistory);
+      console.log('📊 Updated history after optimize:', {
+        length: updatedHistory.length,
+        lastMessage: updatedHistory[updatedHistory.length - 1]?.content?.substring(0, 50) + '...'
+      });
       
       // Transform history to cache format
       const messagesForCache = updatedHistory.map(item => ({
@@ -1402,7 +1449,12 @@ const PremiumChat = () => {
       }
       
     } catch (error) {
-      console.error('Failed to send message:', error);
+      console.error('❌ [MESSAGE_ERROR] Failed to send message:', error);
+      console.error('Error details:', {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data
+      });
       logPremiumChatError(ERROR_TYPES.MESSAGE_SEND, error, {
         sessionId: currentSession?.id,
         messageLength: content.length,
@@ -1414,6 +1466,7 @@ const PremiumChat = () => {
       toast.error(t('premiumChat.messageSentError'));
     } finally {
       setIsTyping(false);
+      console.groupEnd();
     }
   }, [currentSession, optimize, t, useStrategy, strategy, selectedModel, temperature]);
 

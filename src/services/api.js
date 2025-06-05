@@ -2,7 +2,21 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { sanitizeObject } from '../utils/textSanitizer';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:7179/api';
+// Environment-based API URL selection
+const getApiUrl = () => {
+  // Browser-based detection (most reliable)
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  
+  if (isLocalhost) {
+    // Development - use localhost backend
+    return 'https://localhost:7179/api';
+  } else {
+    // Production - use remote backend
+    return 'https://ai-prompt-optimization-backend-api.onrender.com/api';
+  }
+};
+
+const API_URL = getApiUrl();
 
 const api = axios.create({
   baseURL: API_URL,
@@ -302,13 +316,44 @@ export const sessionApi = {
   // Get all sessions with limit
   getSessions: async (limit = null) => {
     const token = localStorage.getItem('jwt_token');
+    console.log('🔐 [DEBUG] sessionApi.getSessions called with:', { limit, hasToken: !!token });
+    
     if (!token) {
+      console.error('❌ [DEBUG] No authentication token found');
       throw new Error('Authentication required');
     }
     
     const query = limit ? `?limit=${limit}` : '';
-    const response = await api.get(`/sessions${query}`);
-    return response.data;
+    const fullUrl = `/sessions${query}`;
+    console.log('🌐 [DEBUG] Making API request to:', fullUrl);
+    console.log('🔑 [DEBUG] Using token (first 20 chars):', token.substring(0, 20) + '...');
+    
+    try {
+      const response = await api.get(fullUrl);
+      console.log('📡 [DEBUG] API Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+        dataType: typeof response.data,
+        isArray: Array.isArray(response.data),
+        dataKeys: response.data ? Object.keys(response.data) : [],
+        dataLength: Array.isArray(response.data) ? response.data.length : 'not array',
+        firstItem: Array.isArray(response.data) && response.data.length > 0 ? response.data[0] : 'no items',
+        rawData: response.data
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error('❌ [DEBUG] sessionApi.getSessions failed:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        responseData: error.response?.data,
+        requestUrl: error.config?.url,
+        requestHeaders: error.config?.headers
+      });
+      throw error;
+    }
   },
 
   // Get specific session

@@ -311,18 +311,18 @@ const useOptimizationStore = create((set, get) => ({
       toast.error('Lütfen önce giriş yapın');
       return;
     }
-    
+
     set({ loading: true, error: null });
-    
+
     try {
       let result;
-      
+
       // Use public endpoint if no auth required
       if (!requireAuth) {
         const publicData = {
           message: prompt,
         };
-        
+
         result = await chatApi.sendPublicMessage(publicData);
       } else if (useStrategy) {
         // Use strategy-based chat if useStrategy is true
@@ -362,6 +362,15 @@ const useOptimizationStore = create((set, get) => ({
       const finalSessionId = result.sessionId;
       if (finalSessionId && finalSessionId !== currentSessionId) {
         set({ currentSessionId: finalSessionId });
+      }
+
+      // Handle new session creation
+      if (result.isNewSession) {
+        // Reset history for new session
+        set({
+          currentSessionId: result.sessionId,
+          history: [] // Start fresh for new session
+        });
       }
       
       // Add messages to history
@@ -407,7 +416,7 @@ const useOptimizationStore = create((set, get) => ({
       
       // Show session title for new sessions
       if (result.isNewSession && result.sessionTitle) {
-        toast.success(`New session: ${result.sessionTitle}`);
+        toast.success(`🆕 Yeni session: ${result.sessionTitle}`);
       }
       
       // 🚀 INSTANT CACHE UPDATE for lightning-fast session switching
